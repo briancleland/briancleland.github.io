@@ -1,0 +1,71 @@
+{
+  "width": 90,
+  "height": 200,
+  "padding": {"top": 10,"left": 240,"bottom": 20,"right": 20},
+  "data": [
+    {
+      "name": "table",
+      "url": "csv/suggestions.csv",
+      "format": {
+        "type": "csv",
+        "parse": {"Date_submitted": "date"}
+      }
+    },
+    {
+      "name": "counts",
+      "source": "table",
+      "transform": [
+        {"type": "facet", "groupby": ["Status_reason"], "summarize": {"Title": "count"}}
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "y",
+      "type": "ordinal",
+      "range": "height",
+      "domain": {"data": "counts","field": "Status_reason", "sort": {"field": "count_Title", "op": "mean"}}
+    },
+    {
+      "name": "x",
+      "range": "width",
+      "type": "linear",
+      "domain": {"data": "counts","field": "count_Title"}
+    },
+    {
+      "name": "colours",
+      "type": "ordinal",
+      "range": "category10",
+      "domain": {"data": "counts","field": "Status_reason"}
+    }
+  ],
+  "axes": [
+    {
+      "type": "y",
+      "scale": "y",
+      "properties": {
+        "ticks": {"stroke":{"opacity":0}},
+        "axis": {"opacity": {"value":0}}
+      }
+    }
+  ],
+  "marks": [    
+    {
+      "name": "counts",
+      "type": "rect",
+      "from": {
+        "data": "counts"
+      },
+      "properties": {
+        "enter": {
+          "x": {"scale": "x", "value": 0},
+          "x2": {"scale": "x", "field": "count_Title"},
+          "y": {"scale": "y","field": "Status_reason","offset": 5},
+          "height": {"scale": "y","band": true,"offset": -10},
+          "fill": {"scale": "colours","field": "Status_reason"},
+          "fillOpacity": {"value": 0.8}
+        }
+      }
+    }
+  ]
+}

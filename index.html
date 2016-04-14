@@ -1,0 +1,59 @@
+<html>
+
+<link href="css/styles.css" rel="stylesheet">
+
+<script src="js/vendor/d3.v3.min.js"></script>
+<script src="js/vendor/vega.js"></script>
+<script src="js/vendor/jquery-2.1.4.min.js"></script>
+
+
+<div id="dashboard">
+  <div class="viz">
+    <h1>Outstanding Suggestions by Dept/Time</h1>
+    <div id="outstanding"></div>
+  </div>
+
+  <div class="viz">
+    <h1>Average Response Times by Department</h1>
+    <div id="responsive"></div>
+  </div>
+
+  <div class="viz">
+    <h1>Suggestions by Department/Status</h1>
+    <div id="allSuggestions"></div>
+  </div>
+
+  <div class="viz">
+    <h1>Total Suggestions over Time</h1>
+    <div id="timeSuggestions"></div>
+  </div>
+  
+  <div class="viz">
+    <h1>Suggestions by "Status Reason"</h1>
+    <div id="statusBar"></div>
+  </div>
+  <div class="viz">
+    <h1>Target Response Times Met</h1>
+    <div id="deadlinePi"></div>
+  </div>
+</div>
+
+<div id="tooltip"></div>
+
+<script src="js/doOutstanding.js"></script>
+<script src="js/doResponsive.js"></script>
+<script src="js/doAllSuggestions.js"></script>
+<script src="js/doTimeSuggestions.js"></script>
+<script src="js/doStatusBar.js"></script>
+<script src="js/doDeadlinePi.js"></script>
+
+<script type="text/javascript">
+  $(document).bind('mousemove', function (e) {
+    $('#tooltip').css({
+      "left": e.pageX + 20,
+      "top": e.pageY
+    });
+  });
+</script>
+
+</html>

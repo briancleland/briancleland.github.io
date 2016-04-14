@@ -1,0 +1,102 @@
+{
+  "width": 260,
+  "height": 200,
+  "padding": {"top": 10,"left": 70,"bottom": 20,"right": 20},
+  "data": [
+    {
+      "name": "table",
+      "url": "csv/suggestions.csv",
+      "format": {"type": "csv"}
+    },    
+    {
+      "name": "stats",
+      "source": "table",
+      "transform": [
+        {"type": "formula", "field": "Response_time", "expr": "datum.Response_outstanding_days + datum.Response_received_days"},
+        {"type": "aggregate", "groupby": "Dept", "summarize": {"Response_time": "mean"}}
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "y",
+      "type": "ordinal",
+      "range": "height",
+      "domain": {"data": "stats","field": "Dept", "sort": {"field": "mean_Response_time", "op": "mean"}}
+    },
+    {
+      "name": "Depts",
+      "type": "ordinal",
+      "domain": [
+        "Department for Regional Development",
+        "Department of Health Social Services and Public Safety",
+        "Department of Education",
+        "Department for Social Development",
+        "Department for Employment and Learning",
+        "Department of the Environment",
+        "Department of Finance and Personnel",
+        "Department of Justice",
+        "Department of Agriculture and Rural Development",
+        "Department of Culture Arts and Leisure",
+        "Office of the First Minister and Deputy First Minister"
+      ],
+      "range": ["DRD","DHSSPS","DENI","DSD","DEL","DOE","DFP","DOJ","DARD","DCAL","OFMDFM"]
+    },
+    {
+      "name": "x",
+      "range": "width",
+      "type": "linear",
+      "domain": {"data": "stats","field": "mean_Response_time"}
+    },
+    {
+      "name": "labelColours",
+      "type": "ordinal",
+      "range": "category10",
+      "domain": {"data": "stats","field": "Dept"}
+    }
+  ],
+  "axes": [
+    {"type": "x","scale": "x"},
+    {
+      "type": "y",
+      "scale": "y",
+      "properties": {
+        "ticks": {"stroke":{"opacity":0}},
+        "labels": {"opacity": {"value":0}},
+        "axis": {"opacity": {"value":0}}
+      }
+    } 
+  ],
+  "marks": [    
+    {
+      "name": "numRequests",
+      "type": "rect",
+      "from": {"data": "stats"},
+      "properties": {
+        "enter": {
+          "x": {"scale": "x", "value": 0},
+          "x2": {"scale": "x", "field": "mean_Response_time"},
+          "y": {"scale": "y","field": "Dept","offset": 5},
+          "height": {"scale": "y","band": true,"offset": -10},
+          "fill": {"scale": "labelColours","field": "Dept"},
+          "fillOpacity": {"value": 0.8}
+        }
+      }
+    },  
+    {
+      "name": "labels",
+      "type": "text",
+      "from": {"data": "stats"},
+      "properties": {
+        "enter": {
+          "x": {"value": -10},
+          "y": {"scale": "y","field": "Dept","offset": 13},
+          "text": {"scale": "Depts","field": "Dept"},
+          "fontSize": {"value": 12},
+          "align": {"value": "right"},
+          "fill": {"value": "black"}
+        }
+      }
+    }
+  ]
+}

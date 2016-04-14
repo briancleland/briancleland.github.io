@@ -1,0 +1,72 @@
+{
+  "width": 200,
+  "height": 200,
+  "padding": {"top": 20,"left": 70,"bottom": 10,"right": 300},
+  "data": [
+    {
+      "name": "table",
+      "url": "csv/suggestions.csv",
+      "format": {
+        "type": "csv",
+        "parse": {"Date_submitted": "date"}
+      }
+    },
+    {
+      "name": "counts",
+      "source": "table",
+      "transform": [
+        {"type": "facet", "groupby": ["Deadline_met"], "summarize": {"Title": "count"}},
+        {"type": "pie", "field": "count_Title"}
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "c",
+      "type": "ordinal",
+      "domain": {"data": "counts", "field": "Deadline_met"},
+      "range": ["#d62728", "#2ca02c"]
+    }
+  ],
+  "legends": [
+    {"fill": "c"}
+  ],
+  "marks": [    
+    {
+      "type": "arc",
+      "from": {"data": "counts"},
+      "properties": {
+        "enter": {
+          "x": {"field": {"group": "width"}, "mult": 0.5},
+          "y": {"field": {"group": "height"}, "mult": 0.5},
+          "startAngle": {"field": "layout_start"},
+          "endAngle": {"field": "layout_end"},
+          "innerRadius": {"value": 50},
+          "outerRadius": {"value": 100},
+          "stroke": {"value": "#fff"}
+        },
+        "update": {
+          "fill": {"scale": "c", "field": "Deadline_met"},
+          "fillOpacity": {"value": 0.8}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "counts"},
+      "properties": {
+        "enter": {
+          "x": {"field": {"group": "width"}, "mult": 0.5},
+          "y": {"field": {"group": "height"}, "mult": 0.5},
+          "radius": {"value": 75},
+          "theta": {"field": "layout_mid"},
+          "fill": {"value": "#fff"},
+          "align": {"value": "center"},
+          "baseline": {"value": "middle"},
+          "text": {"field": "count_Title"},
+          "fontSize": {"value": 12}
+        }
+      }
+    }
+  ]
+}

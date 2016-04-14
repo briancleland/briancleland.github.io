@@ -1,0 +1,130 @@
+{
+  "width": 190,
+  "height": 200,
+  "padding": {"top": 10,"left": 70,"bottom": 20,"right": 100},
+  "data": [
+    {
+      "name": "table",
+      "url": "csv/suggestions.csv",
+      "format": {
+        "type": "csv",
+        "parse": {"year": "number","estimate_low": "number"}
+      }
+    },    
+    {
+      "name": "counts",
+      "source": "table",
+      "transform": [
+        {
+          "type": "facet", "groupby": ["Dept", "Status"], "summarize": {"Title": "count"}
+        }
+      ]
+    },    
+    {
+      "name": "stats",
+      "source": "counts",
+      "transform": [
+        {
+          "type": "aggregate", "groupby": ["Dept"], "summarize": {"count_Title": "sum"}
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "y",
+      "type": "ordinal",
+      "range": "height",
+      "domain": {"data": "stats","field": "Dept","sort": {"field": "sum_count_Title", "op": "mean"}}
+    },
+     {
+      "name": "Depts",
+      "type": "ordinal",
+      "domain": [
+        "Department for Regional Development",
+        "Department of Health Social Services and Public Safety",
+        "Department of Education",
+        "Department for Social Development",
+        "Department for Employment and Learning",
+        "Department of the Environment",
+        "Department of Finance and Personnel",
+        "Department of Justice",
+        "Department of Agriculture and Rural Development",
+        "Department of Culture Arts and Leisure",
+        "Office of the First Minister and Deputy First Minister"
+      ],
+      "range": ["DRD","DHSSPS","DENI","DSD","DEL","DOE","DFP","DOJ","DARD","DCAL","OFMDFM"]
+    },
+    {
+      "name": "x",
+      "range": "width",
+      "type": "linear",
+      "domain": {"data": "stats","field": "sum_count_Title"}
+    },
+    {
+      "name": "c",
+      "type": "ordinal",
+      "range": ["#888","#ff7f0e"],
+      "domain": {"data": "table","field": "Status"}
+    }
+  ],
+  "axes": [
+    {"type": "x","scale": "x","ticks": 6},
+    {
+      "type": "y",
+      "scale": "y",
+      "properties": {
+        "ticks": {"stroke":{"opacity":0}},
+        "labels": {"opacity": {"value":0}},
+        "axis": {"opacity": {"value":0}}
+      }
+    } 
+  ],
+  "legends": [
+    {"fill": "c"}
+  ],
+  "marks": [    
+    {
+      "name": "labels",
+      "type": "text",
+      "from": {
+        "data": "table",
+        "transform": [{
+          "type": "aggregate",
+          "groupby": ["Dept"],
+          "summarize": [{"field": "Dept","ops": ["count"]}]
+          }
+        ] 
+      },
+      "properties": {
+        "enter": {
+          "x": {"value": -10},
+          "y": {"scale": "y","field": "Dept","offset": 10},
+          "text": {"scale": "Depts","field": "Dept"},
+          "fontSize": {"value": 12},
+          "align": {"value": "right"},
+          "fill": {"value": "black"}
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": {
+        "data": "counts",
+        "transform": [
+          {"type": "stack", "groupby": ["Dept"], "sortby": ["Status"], "field": "count_Title"}
+        ]
+      },
+      "properties": {
+        "enter": {
+          "y": {"scale": "y", "field": "Dept"},
+          "height": {"scale": "y","band": true,"offset": -10},
+          "x": {"scale": "x", "field": "layout_start"},
+          "x2": {"scale": "x", "field": "layout_end"},
+          "fill": {"scale": "c", "field": "Status"},
+          "fillOpacity": {"value": 0.8}
+        }
+      }
+    }
+  ]
+}
