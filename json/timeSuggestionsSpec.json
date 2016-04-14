@@ -1,6 +1,6 @@
 {
-  "width": 310,
-  "height": 200,
+  "width": 1100,
+  "height": 100,
   "padding": {"top": 10,"left": 20,"bottom": 20,"right": 20},
   "data": [
     {
@@ -8,15 +8,15 @@
       "url": "csv/suggestions.csv",
       "format": {
         "type": "csv",
-        "parse": {"Date_submitted": "date"}
+        "parse": {"Date_submitted": "date", "Count": "number"}
       }
     }
   ],
   "scales": [
     {
       "name": "y",
-      "type": "ordinal",
-      "range": [200,0],
+      "type": "linear",
+      "range": [100,0],
       "domain": {"data": "table","field": "Count"}
     },
     {
@@ -30,10 +30,20 @@
       "type": "time",
       "range": "width",
       "domain": {"data": "table","field": "Date_submitted"}
+    },
+    {
+      "name": "c",
+      "type": "ordinal",
+      "range": "category20",
+      "domain": {"data": "table","field": "Dept"}
     }
   ],
   "axes": [
-    {"type": "x", "scale": "x", "ticks": 6}
+    {"type": "x", "scale": "x", "ticks": 12},
+    {"type": "y", "scale": "y", "ticks": 6}
+  ],
+  "legends": [
+    {"fill": "c"}
   ],
   "marks": [    
     {
@@ -48,7 +58,41 @@
           "y": {"scale": "y2", "value": 0},
           "y2": {"scale": "y", "field": "Count"},
           "fill": {"value": "#1f77b4"},
-          "fillOpacity": {"value": 0.8}
+          "fillOpacity": {"value": 0}
+        }
+      }
+    },
+    {
+      "type": "line",
+      "from": {
+        "data": "table","transform": [{"type": "sort", "by": "Count"}]
+      },
+      "properties": {
+        "enter": {
+          "interpolate": {"value": "monotone"},
+          "x": {"scale": "x", "field": "Date_submitted"},
+          "y": {"scale": "y", "field": "Count"},
+          "stroke": {"value": "#000"},
+          "strokeWidth": {"value": 1},
+          "strokeOpacity": {"value": 0.5}
+        }
+      }
+    },
+    {
+      "name": "suggestion",
+      "type": "symbol",
+      "from": {
+        "data": "table","transform": [{"type": "sort", "by": "Count"}]
+      },
+      "properties": {
+        "enter": {
+          "interpolate": {"value": "monotone"},
+          "x": {"scale": "x", "field": "Date_submitted"},
+          "y": {"scale": "y", "field": "Count"},
+          "stroke": {"value": "#000"},
+          "strokeOpacity": {"value": 1},
+          "fill": {"scale": "c", "field": "Dept"},
+          "size": {"value": 50}
         }
       }
     }

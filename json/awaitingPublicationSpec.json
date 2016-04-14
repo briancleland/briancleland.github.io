@@ -1,0 +1,140 @@
+{
+  "width": 210,
+  "height": 200,
+  "padding": {"top": 10,"left": 85,"bottom": 20,"right": 50},
+  "data": [
+    {
+      "name": "table",
+      "url": "csv/suggestions.csv",
+      "format": {
+        "type": "csv",
+        "parse": {"Response_received_days": "number"}
+
+      }
+    }
+  ],
+  "scales": [
+    {
+      "name": "y",
+      "type": "ordinal",
+      "range": "height",
+      "domain": {"data": "table","field": "Dept"}
+    },
+   {
+      "name": "Depts",
+      "type": "ordinal",
+      "domain": [
+        "Department for Regional Development",
+        "Department of Health Social Services and Public Safety",
+        "Department of Education",
+        "Department for Social Development",
+        "Department for Employment and Learning",
+        "Department of the Environment",
+        "Department of Finance and Personnel",
+        "Department of Justice",
+        "Department of Agriculture and Rural Development",
+        "Department of Culture Arts and Leisure",
+        "Office of the First Minister and Deputy First Minister"
+      ],
+      "range": ["DRD","DHSSPS","DENI","DSD","DEL","DOE","DFP","DOJ","DARD","DCAL","OFMDFM"]
+    },
+    {
+      "name": "x",
+      "range": "width",
+      "type": "linear",
+      "domain": {"data": "table","field": "Response_received_days"}
+    },
+    {
+      "name": "c",
+      "type": "ordinal",
+      "range": ["red","green","#bbb"],
+      "domain": {"data": "table","field": "Can_publish"}
+    },
+    {
+      "name": "labelColor",
+      "type": "ordinal",
+      "range": "category20",
+      "domain": {"data": "table","field": "Dept"}
+    }
+    
+  ],
+  "axes": [
+    {"type": "x","scale": "x"},
+    {
+      "type": "y",
+      "scale": "y",
+      "properties": {
+        "ticks": {"stroke":{"opacity":0}},
+        "labels": {"opacity": {"value":0}}
+      }
+    } 
+  ],
+  "marks": [
+    {
+      "name": "requests",
+      "type": "symbol",
+      "from": {
+        "data": "table", 
+        "transform": [
+          {"type": "filter", "test": "datum.Status_reason == 'Response received - Awaiting Publication'"}
+        ]
+      },
+      "properties": {
+        "enter": {
+          "x": {
+            "scale": "x",
+            "field": "Response_received_days"
+          },
+          "y": {"scale": "y","field": "Dept","offset": 12},
+          "size": {"value": 100},
+          "fill": {"scale": "labelColor","field": "Dept"},
+          "stroke": {"value": "#000"},
+          "strokeOpacity": {"value": 0.8}
+        },
+        "update":{
+          "strokeWidth": {"value": 1}
+        },
+        "hover":{
+          "strokeWidth": {"value": 2}
+        }
+      }
+    },    
+    {
+      "name": "keys",
+      "type": "symbol",
+      "from": {"data": "table"},
+      "properties": {
+        "enter": {
+          "x": {"value": -15},
+          "y": {"scale": "y","field": "Dept","offset": 12},
+          "size": {"value": 50},
+          "fillOpacity": {"value": 1},
+          "fill": {"scale": "labelColor","field": "Dept"}
+        }
+      }
+    },    
+    {
+      "name": "labels",
+      "type": "text",
+      "from": {
+        "data": "table",
+        "transform": [{
+          "type": "aggregate",
+          "groupby": ["Dept"],
+          "summarize": [{"field": "Dept","ops": ["count"]}]
+          }
+        ] 
+      },
+      "properties": {
+        "enter": {
+          "x": {"value": -30},
+          "y": {"scale": "y","field": "Dept","offset": 17},
+          "text": {"scale": "Depts","field": "Dept"},
+          "fontSize": {"value": 12},
+          "align": {"value": "right"},
+          "fill": {"value": "black"}
+        }
+      }
+    }
+  ]
+}

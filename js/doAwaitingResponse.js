@@ -1,6 +1,6 @@
-    vg.parse.spec("json/outstandingSpec.json", function (chart) {
+    vg.parse.spec("json/awaitingResponseSpec.json", function (chart) {
       chart({
-          el: "#outstanding",
+          el: "#awaitingResponse",
           renderer: "svg"
         })
         .on("mouseover", function (event, item) {

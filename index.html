@@ -9,10 +9,15 @@
 
 <div id="dashboard">
   <div class="viz">
-    <h1>Outstanding Suggestions by Dept/Time</h1>
-    <div id="outstanding"></div>
+    <h1>Suggestions Awaiting Response</h1>
+    <div id="awaitingResponse"></div>
   </div>
 
+  <div class="viz">
+    <h1>Suggestions Awaiting Publication</h1>
+    <div id="awaitingPublication"></div>
+  </div> 
+  
   <div class="viz">
     <h1>Average Response Times by Department</h1>
     <div id="responsive"></div>
@@ -22,12 +27,7 @@
     <h1>Suggestions by Department/Status</h1>
     <div id="allSuggestions"></div>
   </div>
-
-  <div class="viz">
-    <h1>Total Suggestions over Time</h1>
-    <div id="timeSuggestions"></div>
-  </div>
-  
+ 
   <div class="viz">
     <h1>Suggestions by "Status Reason"</h1>
     <div id="statusBar"></div>
@@ -36,11 +36,18 @@
     <h1>Target Response Times Met</h1>
     <div id="deadlinePi"></div>
   </div>
+  
+  <div class="viz wide">
+    <h1>Total Suggestions over Time</h1>
+    <div id="timeSuggestions"></div>
+  </div>
+  
 </div>
 
 <div id="tooltip"></div>
 
-<script src="js/doOutstanding.js"></script>
+<script src="js/doAwaitingResponse.js"></script>
+<script src="js/doAwaitingPublication.js"></script>
 <script src="js/doResponsive.js"></script>
 <script src="js/doAllSuggestions.js"></script>
 <script src="js/doTimeSuggestions.js"></script>
