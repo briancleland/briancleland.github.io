@@ -34,8 +34,14 @@ body {
   width: calc(33% - 52px);
 }
 
-.wide {
-  width: calc(100% - 64px);
+.large {
+  width: calc(66% - 50px);
+}
+.medium {
+  width: calc(50% - 58px);
+}
+.small {
+  width: calc(33% - 52px);
 }
 
 .viz h1 {

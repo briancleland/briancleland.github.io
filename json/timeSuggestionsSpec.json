@@ -1,6 +1,6 @@
 {
-  "width": 1100,
-  "height": 100,
+  "width": 680,
+  "height": 200,
   "padding": {"top": 10,"left": 20,"bottom": 20,"right": 20},
   "data": [
     {
@@ -16,7 +16,7 @@
     {
       "name": "y",
       "type": "linear",
-      "range": [100,0],
+      "range": [200,0],
       "domain": {"data": "table","field": "Count"}
     },
     {
@@ -73,7 +73,7 @@
           "x": {"scale": "x", "field": "Date_submitted"},
           "y": {"scale": "y", "field": "Count"},
           "stroke": {"value": "#000"},
-          "strokeWidth": {"value": 1},
+          "strokeWidth": {"value": 2},
           "strokeOpacity": {"value": 0.5}
         }
       }
@@ -92,7 +92,7 @@
           "stroke": {"value": "#000"},
           "strokeOpacity": {"value": 1},
           "fill": {"scale": "c", "field": "Dept"},
-          "size": {"value": 50}
+          "size": {"value": 100}
         }
       }
     }
