@@ -99,16 +99,13 @@ $.get("website/json/spec.json", function(json) {
                 }
             })
             .update();
-    });
+    }, dataType: object);
 })
   .done(function() {
-    alert( "second success" );
+    console.log( "second success" );
   })
   .fail(function(jqXHR, textStatus) {
-    alert( "error:" + textStatus );
-  })
-  .always(function() {
-    alert( "finished" );
+    console.log( "error:" + textStatus );
   });
 
 
