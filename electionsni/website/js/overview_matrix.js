@@ -99,7 +99,7 @@ $.get("website/json/spec.json", function(json) {
                 }
             })
             .update();
-    }, dataType: object);
+    }, dataType: "object");
 })
   .done(function() {
     console.log( "second success" );
