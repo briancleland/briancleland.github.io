@@ -100,7 +100,7 @@ $.get("website/json/spec.json", function(specData) {
             })
             .update();
     });
-})
+},"text")
   .done(function() {
     console.log( "second success" );
   })
