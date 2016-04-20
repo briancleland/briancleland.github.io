@@ -77,9 +77,9 @@ $.each(constituencies, function(i, constituency) {
     };
 });
 
-$.get("website/json/spec.json", function(json) {
-    console.log("json received", data);
-    var spec = JSON5.parse(json);
+$.get("website/json/spec.json", function(specData) {
+    console.log("json received", specData);
+    var spec = JSON5.parse(specData);
     console.log(spec);
     spec.data = [{"name": "results","values": data}];
     vg.parse.spec(spec, function(chart) {
@@ -100,7 +100,7 @@ $.get("website/json/spec.json", function(json) {
             })
             .update();
     });
-}, "object")
+})
   .done(function() {
     console.log( "second success" );
   })
