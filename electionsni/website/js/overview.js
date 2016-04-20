@@ -65,8 +65,17 @@ $.each(locations, function(i,location){
             {name: 'C',value: 1, style: { fillStyle: 'rgba(0,0,0,0.5)',       strokeStyle: 'rgba(0,0,0,0.5)', lineWidth: 2}}
         ]
     })
-    .bindPopup("<b>Belfast South</b><br> Claire Hanna (SDLP)<br> Fearghal McKinney (SDLP)<br>")
     .on('click', function(e) {
-        this.openPopup();
+        var popup = L.popup()
+           .setContent("<b>Belfast South</b><br> \
+                        Claire Hanna (SDLP)<br> \
+                        Fearghal McKinney (SDLP)<br> \
+                        Micchael McGimpsey (UUP)<br> \
+                        Anna Lo (AP)<br> \
+                        Máirtín Ó Muilleoir (SF)<br> \
+                        Emma Pengelly (DUP)<br>")
+           .setLatLng(e.latlng) 
+           .openOn(map);
+    }).addTo(map);  
     }).addTo(map);  
 })
