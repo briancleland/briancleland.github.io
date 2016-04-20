@@ -1,25 +1,49 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
- <meta charset='utf-8'>
- <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
- <link rel="stylesheet" type="text/css" href="/website/css/style.css" media="screen, handheld" />
- <link rel="stylesheet" type="text/css" href="/website/css/enhanced.css" media="screen  and (min-width: 60.5em)" />
-		<!--[if (lt IE 9)&(!IEMobile)]>
+    <meta charset='utf-8'>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+    <link rel="stylesheet" type="text/css" href="stages.css">
+    
+    <link rel="stylesheet" type="text/css" href="../../../../electionsni/website/css/style.css" media="screen, handheld" />
+    <link rel="stylesheet" type="text/css" href="../../../../electionsni/website/css/enhanced.css" media="screen  and (min-width: 60.5em)" />
+    <!--[if (lt IE 9)&(!IEMobile)]>
 		<link rel="stylesheet" type="text/css" href="enhanced.css" />
 		<![endif]-->
 </head>
+
 <body>
 
-<a href="/index.html">Back</a>
-<div id="controls">
-    <a href="#Pause" id="pause-replay">Pause</a> | <a href="#Next" id="step">Next</a> | <a href="#Again" id="again">Do that bit again</a>
-</div>
-<div id="thepost"></div>
-<div id="theline"></div>
-<div id="constituency"><b><span id="constituency-span"></span></b> Quota <span id="quota-span"></span> <b>Stage <span id="count-span">1</span></b></div>
+    <a href="/index.html">Back</a>
+    <div id="controls">
+        <a href="#Again" id="again" class="fa fa-step-backward"></a>
+        <a href="#Pause" id="pause-replay" class="fa fa-pause"></a>
+        <a href="#Next" id="step" class="fa fa-step-forward"></a>
+    </div>
+    <div id="animation">
+        <div id="thepost"></div>
+        <div id="theline"></div>
+        <div id="constituency">
+            <b><span id="constituency-span"></span></b> 
+            Quota <span id="quota-span"></span> 
+            <b>Stage <span id="count-span">1</span></b>
+            <div id="countMarkers"></div>
+        </div>
+    </div>
 
-  <script src="/website/js/stages.js"></script>
+    <script src="stages.js"></script>
 
+    <script>
+        for (i = 1; i < 11; i++) {
+            var marker = $("<div class='countMarker' id='countMarker-" + i + " />");
+            $("#countMarkers").append("<div class='countMarker' id='countMarker-" + i + "'></div>");
+        }
+    </script>
+    
 </body>
+
 </html>

@@ -1,0 +1,38 @@
+#controls a {
+    text-decoration: none;
+    margin: 8px 10px;
+    color: black;
+    width: 15px;
+}
+
+#controls {
+    padding: 0px;
+    background: #eee;
+    margin: 2px 0 20px 0;
+    border: 1px solid #ccc;
+}
+
+#animation {
+    
+}
+
+#countMarkers {
+    padding: 0px;
+    background: #eee;
+    margin: 2px 0 20px 0;
+    border: 1px solid #ccc;
+    width: 300px;
+    height: 20px;
+}
+
+.countMarker {
+    width: 20px;
+    height: 20px;
+    background: white;
+    float: left;
+    border: 1px solid #eee;
+}
+
+.countMarker.completed {
+    background: green;
+}
