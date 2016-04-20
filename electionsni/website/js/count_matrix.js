@@ -60,39 +60,20 @@ var parties = [{
     colour: "#1e0082"
 }]
 
-var data = [];
-
-$.each(constituencies, function(i, constituency) {
-    var numElected = Math.floor(Math.random() * 7) + 2
-    for (i = 1; i < numElected; i++) {
-        var party = parties[Math.floor(Math.random() * parties.length)];
-        data.push({
-            constituency: constituency,
-            candidate: "Joe Bloggs",
-            party_name: party.name,
-            party_short: party.short,
-            party_colour: party.colour,
-            count: i
-        });
-    };
-});
-
-console.log(data);
-
-$.get("website/json/spec.json", function(json) {
+$.get("website/json/countSpec.json", function(json) {
     var spec = JSON5.parse(json);
-    spec.data = [{"name": "results","values": data}];
+    console.log(spec);
     vg.parse.spec(spec, function(chart) {
         var view = chart({
-                el: "#overview_matrix"
+                el: "#count_matrix"
             })
             .on("mouseover", function(event, item) {
-                if (item && item.datum.candidate) {
+                if (item && item.datum.Surname) {
                     console.log(item);
                     $('#tooltip').show();
                     $('#tooltip').html(
-                        "<b>" + item.datum.candidate + "</b><br>" +
-                        item.datum.party_name
+                        "<b>" + item.datum.Surname + "</b><br>" +
+                        item.datum.Party_Name
                     );
                 } else {
                     $('#tooltip').hide();
