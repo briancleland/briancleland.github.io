@@ -100,7 +100,16 @@ $.get("website/json/spec.json", function(json) {
             })
             .update();
     });
-});
+})
+  .done(function() {
+    alert( "second success" );
+  })
+  .fail(function(jqXHR, textStatus) {
+    alert( "error:" + textStatus );
+  })
+  .always(function() {
+    alert( "finished" );
+  });
 
 
 //}
