@@ -100,7 +100,7 @@ $.get("website/json/spec.json", function(json) {
             })
             .update();
     });
-}, dataType: "object")
+}, "object")
   .done(function() {
     console.log( "second success" );
   })
