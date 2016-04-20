@@ -77,11 +77,10 @@ $.each(constituencies, function(i, constituency) {
     };
 });
 
-console.log(data);
-
 $.get("website/json/spec.json", function(json) {
-    console.log(spec)
+    console.log("json received", data);
     var spec = JSON5.parse(json);
+    console.log(spec);
     spec.data = [{"name": "results","values": data}];
     vg.parse.spec(spec, function(chart) {
         var view = chart({
