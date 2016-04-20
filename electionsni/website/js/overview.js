@@ -77,5 +77,4 @@ $.each(locations, function(i,location){
            .setLatLng(e.latlng) 
            .openOn(map);
     }).addTo(map);  
-    }).addTo(map);  
 })
