@@ -26,7 +26,7 @@
 .countMarker {
     width: 20px;
     height: 20px;
-    background: #eee;
+    background: #ddd;
     float: left;
     text-align: center;
     margin-left: 1px;
@@ -35,12 +35,12 @@
 
 .countMarker.completed {
     color: white;
-    background: #006600;
+    background: #4b9b4b;
 }
 
 .countMarker.active {
     color: white;
-    background: #006600;
+    background: #4b9b4b;
     -webkit-animation: pulsate 1s ease-out;
     -webkit-animation-iteration-count: infinite; 
 }
@@ -52,14 +52,30 @@
     font-size: 11px;
 }
 
+/*
 @-webkit-keyframes pulsate {
-    0% {background: #eee;}
-    50% {background: #006600;}
-    100% {background: #eee;}
+    0% {background: #badeba;}
+    50% {background: #eee;}
+    100% {background: #badeba;}
+}
+*/
+
+@-webkit-keyframes pulsate {
+    0% {color: #4b9b4b;}
+    50% {color: #fff;}
+    100% {color: #4b9b4b;}
 }
 
 #menuBar {
     overflow: auto;
     background: #eee;
     padding: 10px;
+}
+
+#theline {
+    top: 193px !important;
+}
+
+#thepost {
+    top: 20px !important;
 }

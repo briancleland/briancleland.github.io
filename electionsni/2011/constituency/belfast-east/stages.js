@@ -103,7 +103,7 @@ if(constituency){
     //once we have all the data in the countDict we can now go through each count and order it
     //we do this in order as once a candidate is elected we store their final order in the candidatesDict and reuse it subsquent counts
     //only sorting candidates that are not eliminated or elected
-
+    
     for (var k=1; k<=counts;k++){
         if (countDict.hasOwnProperty(k)) {
             adjustOrder(countDict[k]);
@@ -138,6 +138,10 @@ if(constituency){
         again();
     });
 
+    for (i = 1; i < counts+1; i++) {
+        var marker = $("<div class='countMarker' id='countMarker-" + i + " />");
+        $("#countMarkers").append("<div class='countMarker' id='countMarker-" + i + "'><p>" + i + "</p></div>");
+    }
     
     $("#countMarker-1").addClass("active")
     firstCount();  //run the first count
@@ -153,6 +157,7 @@ if(constituency){
 //then animate their top to final position and move the name div at the same time
 function firstCount(){
     $("#thepost").height(candidates.length*30);
+    $(".countMarker").removeClass("completed")
     setActiveMarker(1);
     for(var j=0;j<candidates.length;j++){
         $('<div id="cname'+candidates[j].id+'" class="candidateLabel '+candidates[j]["party"]+'_label" style="top:'+(topMargin+ (j*30)) +'px;left:10px;">'+candidates[j]["name"]+'</div>')
@@ -214,6 +219,8 @@ function advanceCount(){
                                     });
                                     //TODO:at this point we'd like to animate to new order
                                     $(this).remove();
+                                    $(".active").addClass("completed");
+                                    $(".countMarker").removeClass("active");    
                                 });
                             left = left + transfers[candidates[t].id] * qFactor;
                         }
