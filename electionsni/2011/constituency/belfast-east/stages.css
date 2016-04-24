@@ -1,6 +1,6 @@
 #controls a {
     text-decoration: none;
-    margin: 8px 10px;
+    margin: 8px 4px;
     color: black;
     width: 15px;
 }
@@ -22,6 +22,14 @@
     margin: 0 !important;
     float: left;
 }
+
+#countMarkers:before {
+    content: "Stages:";
+    float: left;
+    margin: 1px 10px 0 0;
+    font-size: 14px;
+    color: #888;
+} 
 
 .countMarker {
     width: 20px;
@@ -52,14 +60,6 @@
     font-size: 11px;
 }
 
-/*
-@-webkit-keyframes pulsate {
-    0% {background: #badeba;}
-    50% {background: #eee;}
-    100% {background: #badeba;}
-}
-*/
-
 @-webkit-keyframes pulsate {
     0% {color: #4b9b4b;}
     50% {color: #fff;}
@@ -78,4 +78,11 @@
 
 #thepost {
     top: 20px !important;
+}
+
+#constituency {
+    float: left !important;
+    position: relative !important;
+    margin-left: 10px !important;
+    top: 10px;
 }
