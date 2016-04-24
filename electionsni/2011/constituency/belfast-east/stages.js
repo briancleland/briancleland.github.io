@@ -10,6 +10,7 @@ var startLeft = leftPadding+nameSpace;
 var voteWidth = 600;
 var running = true;
 var earlyStage = true;
+var topMargin = 20;
 
 var json = (function() {
         var json = null;
@@ -154,16 +155,16 @@ function firstCount(){
     $("#thepost").height(candidates.length*30);
     setActiveMarker(1);
     for(var j=0;j<candidates.length;j++){
-        $('<div id="cname'+candidates[j].id+'" class="candidateLabel '+candidates[j]["party"]+'_label" style="top:'+(40 + (j*30)) +'px;left:10px;">'+candidates[j]["name"]+'</div>')
+        $('<div id="cname'+candidates[j].id+'" class="candidateLabel '+candidates[j]["party"]+'_label" style="top:'+(topMargin+ (j*30)) +'px;left:10px;">'+candidates[j]["name"]+'</div>')
         .appendTo("#animation");
-        $('<div data-candidate="'+candidates[j].id+'" id="candidate'+candidates[j].id+'" class="votes '+candidates[j]["party"]+'" style="top:'+(40 + (j*30)) +'px;left:'+startLeft+'px;"></div>')
+        $('<div data-candidate="'+candidates[j].id+'" id="candidate'+candidates[j].id+'" class="votes '+candidates[j]["party"]+'" style="top:'+(topMargin+ (j*30)) +'px;left:'+startLeft+'px;"></div>')
         .appendTo("#animation")
         .animate({width:countDict[1][candidates[j].id]["total"] * qFactor},1500*speed).text(countDict[1][candidates[j].id]["total"]+ " " + countDict[1][candidates[j].id]["status"])
-        .animate({top:40+(countDict[1][candidates[j].id]["order"]*30)},{
+        .animate({top:topMargin+(countDict[1][candidates[j].id]["order"]*30)},{
             duration:500*speed,
             start:function(){
                 $("#cname"+$(this).data('candidate'))
-                .animate({top:40+(countDict[1][$(this).data('candidate')]["order"]*30)},500*speed)
+                .animate({top:topMargin+(countDict[1][$(this).data('candidate')]["order"]*30)},500*speed)
             }
         });
     }
@@ -187,14 +188,14 @@ function advanceCount(){
                 $("#candidate"+candidates[j].id).width(countDict[i][candidates[j].id]["total"] * qFactor);
                 var transfers = transferDict[i];
                 var left = startLeft + countDict[i][candidates[j].id]["total"] * qFactor;
-                var top = 40 + (countDict[i-1][candidates[j].id]["order"]*30);
+                var top = topMargin+ (countDict[i-1][candidates[j].id]["order"]*30);
                 if (!transfered){
                     for (var t=0;t<candidates.length;t++) {
                         if (countDict[i][candidates[t].id]["transfers"] == false) {
                             var localLeft = startLeft+countDict[i-1][candidates[t].id]["total"] * qFactor;
                             $('<div data-candidate="'+candidates[t].id+'" style="width:'+transfers[candidates[t].id] * qFactor+'px;left:'+left+'px; top:'+top+'px;" class="votes '+candidates[t]["party"]+'"></div>')
                                 .appendTo("#animation").delay(300*speed)
-                                .animate({top:40 + (countDict[i-1][candidates[t].id]["order"]*30), left:startLeft+voteWidth+20},900*speed, function(){
+                                .animate({top:topMargin+ (countDict[i-1][candidates[t].id]["order"]*30), left:startLeft+voteWidth+20},900*speed, function(){
                                     earlyStage = false;
                                     if (transfers[$(this).data('candidate')] >0 ){
                                         $("#candidate"+$(this).data('candidate'))
@@ -204,11 +205,11 @@ function advanceCount(){
                                 .animate({left:localLeft},900*speed, function(){
                                     $("#candidate"+$(this).data('candidate')).width(countDict[i][$(this).data('candidate')]["total"] * qFactor)
                                     .text(countDict[i][$(this).data('candidate')]["total"] + " " + countDict[i][$(this).data('candidate')]["status"])
-                                    .animate({top:40+(countDict[i][$(this).data('candidate')]["order"]*30)},{
+                                    .animate({top:topMargin+(countDict[i][$(this).data('candidate')]["order"]*30)},{
                                         duration:500*speed,
                                         start:function(){
                                             $("#cname"+$(this).data('candidate'))
-                                            .animate({top:40+(countDict[i][$(this).data('candidate')]["order"]*30)},500*speed)
+                                            .animate({top:topMargin+(countDict[i][$(this).data('candidate')]["order"]*30)},500*speed)
                                         }
                                     });
                                     //TODO:at this point we'd like to animate to new order
@@ -225,7 +226,8 @@ function advanceCount(){
         }
     }else{
         clearInterval(loop);
-        $("#pause-replay").text("Replay");
+        $("#pause-replay").removeClass("fa-pause");
+        $("#pause-replay").addClass("fa-repeat");
     }
     countNumber += 1;
 
@@ -234,6 +236,8 @@ function advanceCount(){
 function pause(){
     clearInterval(loop);
     running = false;
+    $(".active").addClass("completed");
+    $(".active").removeClass("active");
 }
 
 function resume(){
@@ -294,9 +298,9 @@ function playStep(i){
         $(".votes").remove();
         if (i>1){
             for(var j=0;j<candidates.length;j++){
-                $('<div id="cname'+candidates[j].id+'" class="candidateLabel '+candidates[j]["party"]+'_label" style="top:'+(40 + (countDict[i-1][candidates[j].id]["order"]*30)) +'px;left:10px;">'+candidates[j]["name"]+'</div>')
+                $('<div id="cname'+candidates[j].id+'" class="candidateLabel '+candidates[j]["party"]+'_label" style="top:'+(topMargin+ (countDict[i-1][candidates[j].id]["order"]*30)) +'px;left:10px;">'+candidates[j]["name"]+'</div>')
                 .appendTo("#animation");
-                $('<div data-candidate="'+candidates[j].id+'" id="candidate'+candidates[j].id+'" class="votes '+candidates[j]["party"]+'" style="top:'+(40 + (countDict[i-1][candidates[j].id]["order"]*30)) +'px;left:'+startLeft+'px;"></div>')
+                $('<div data-candidate="'+candidates[j].id+'" id="candidate'+candidates[j].id+'" class="votes '+candidates[j]["party"]+'" style="top:'+(topMargin+ (countDict[i-1][candidates[j].id]["order"]*30)) +'px;left:'+startLeft+'px;"></div>')
                 .appendTo("#animation");
                 $("#candidate"+candidates[j].id).width(countDict[i-1][candidates[j].id]["total"] * qFactor).text(countDict[i-1][candidates[j].id]["total"]);
             }

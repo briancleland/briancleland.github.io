@@ -8,19 +8,18 @@
 #controls {
     padding: 0px;
     background: #eee;
-    margin: 2px 0 20px 0 !important;
+    margin: 0 !important;
     display: block !important;
-    border: 1px solid #ccc;
-    width: 124px;
     float: left;
 }
 
-#animation {}
+#animation {
+    position: relative;
+}
 
 #countMarkers {
     padding: 8px;
-    margin: 2px 0 20px 0;
-/*    border: 1px solid #ccc;*/
+    margin: 0 !important;
     float: left;
 }
 
@@ -30,7 +29,6 @@
     background: #eee;
     float: left;
     text-align: center;
-/*    border: 1px solid #ccc;*/
     margin-left: 1px;
     color: #888;
 }
@@ -38,11 +36,9 @@
 .countMarker.completed {
     color: white;
     background: #006600;
-/*    border: 1px solid #006600;*/
 }
 
 .countMarker.active {
-/*    border: 1px solid #006600;*/
     color: white;
     background: #006600;
     -webkit-animation: pulsate 1s ease-out;
@@ -56,10 +52,14 @@
     font-size: 11px;
 }
 
-
-
 @-webkit-keyframes pulsate {
     0% {background: #eee;}
     50% {background: #006600;}
     100% {background: #eee;}
+}
+
+#menuBar {
+    overflow: auto;
+    background: #eee;
+    padding: 10px;
 }
