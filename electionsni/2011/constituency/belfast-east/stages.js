@@ -137,24 +137,27 @@ if(constituency){
         again();
     });
 
+    
+    $("#countMarker-1").addClass("active")
     firstCount();  //run the first count
     var countNumber = 2;  //global loop variable
-    //set the advance count function to run in a loop
+    // set the advance count function to run in a loop
     var loop = window.setInterval(advanceCount,4000*speed);
 }else{
     //if we didn't load a constituency var then we have no data yet
-    $("body").text("There is no data up for this constituency at present");
+    $("#animation").text("There is no data up for this constituency at present");
 }
 
 //the magic, simple enough, append some divs and animate their width's to final position 
 //then animate their top to final position and move the name div at the same time
 function firstCount(){
     $("#thepost").height(candidates.length*30);
+    setActiveMarker(1);
     for(var j=0;j<candidates.length;j++){
         $('<div id="cname'+candidates[j].id+'" class="candidateLabel '+candidates[j]["party"]+'_label" style="top:'+(40 + (j*30)) +'px;left:10px;">'+candidates[j]["name"]+'</div>')
-        .appendTo("body");
+        .appendTo("#animation");
         $('<div data-candidate="'+candidates[j].id+'" id="candidate'+candidates[j].id+'" class="votes '+candidates[j]["party"]+'" style="top:'+(40 + (j*30)) +'px;left:'+startLeft+'px;"></div>')
-        .appendTo("body")
+        .appendTo("#animation")
         .animate({width:countDict[1][candidates[j].id]["total"] * qFactor},1500*speed).text(countDict[1][candidates[j].id]["total"]+ " " + countDict[1][candidates[j].id]["status"])
         .animate({top:40+(countDict[1][candidates[j].id]["order"]*30)},{
             duration:500*speed,
@@ -175,6 +178,7 @@ function advanceCount(){
     if(countNumber in countDict){
         earlyStage = true;
         var i = countNumber;
+        setActiveMarker(countNumber);
         $("#count-span").text(countNumber);
         updateCounter(countNumber);
         for (var j=0;j<candidates.length;j++) {
@@ -189,7 +193,7 @@ function advanceCount(){
                         if (countDict[i][candidates[t].id]["transfers"] == false) {
                             var localLeft = startLeft+countDict[i-1][candidates[t].id]["total"] * qFactor;
                             $('<div data-candidate="'+candidates[t].id+'" style="width:'+transfers[candidates[t].id] * qFactor+'px;left:'+left+'px; top:'+top+'px;" class="votes '+candidates[t]["party"]+'"></div>')
-                                .appendTo("body").delay(300*speed)
+                                .appendTo("#animation").delay(300*speed)
                                 .animate({top:40 + (countDict[i-1][candidates[t].id]["order"]*30), left:startLeft+voteWidth+20},900*speed, function(){
                                     earlyStage = false;
                                     if (transfers[$(this).data('candidate')] >0 ){
@@ -291,9 +295,9 @@ function playStep(i){
         if (i>1){
             for(var j=0;j<candidates.length;j++){
                 $('<div id="cname'+candidates[j].id+'" class="candidateLabel '+candidates[j]["party"]+'_label" style="top:'+(40 + (countDict[i-1][candidates[j].id]["order"]*30)) +'px;left:10px;">'+candidates[j]["name"]+'</div>')
-                .appendTo("body");
+                .appendTo("#animation");
                 $('<div data-candidate="'+candidates[j].id+'" id="candidate'+candidates[j].id+'" class="votes '+candidates[j]["party"]+'" style="top:'+(40 + (countDict[i-1][candidates[j].id]["order"]*30)) +'px;left:'+startLeft+'px;"></div>')
-                .appendTo("body");
+                .appendTo("#animation");
                 $("#candidate"+candidates[j].id).width(countDict[i-1][candidates[j].id]["total"] * qFactor).text(countDict[i-1][candidates[j].id]["total"]);
             }
             advanceCount();
@@ -347,6 +351,15 @@ function adjustOrder(singleCountDict){
 }
 
 function updateCounter(n) {
-      var countNumber = n-1;
-      $("#countMarker-" + countNumber).toggleClass("completed")
+    console.log("Completed marker = #countMarker-" + n);
+    $(".countMarker").removeClass("completed")
+    for (i=1; i<n; i++) {
+        $("#countMarker-" + i).addClass("completed")        
+    }
 };
+
+function setActiveMarker(n) {
+    console.log("Active marker = #countMarker-" + n);
+    $(".countMarker").removeClass("active")
+    $("#countMarker-" + n).addClass("active")
+}
