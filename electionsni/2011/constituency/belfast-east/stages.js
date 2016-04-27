@@ -25,7 +25,6 @@ var json = (function() {
         });
         return json;
     })();
-console.log(json);
 var	constituency = json.Constituency.countInfo;
 var data = json.Constituency.countGroup;
 
@@ -143,7 +142,12 @@ if(constituency){
         $("#countMarkers").append("<div class='countMarker' id='countMarker-" + i + "'><p>" + i + "</p></div>");
     }
     
-    $("#countMarker-1").addClass("active")
+    // bind click events to stage numbers
+    $(".countMarker").click(function (event) {
+        var id = parseInt($(this).attr('id').replace("countMarker-",""));
+        jumpToStep(id);
+    })
+        
     firstCount();  //run the first count
     var countNumber = 2;  //global loop variable
     // set the advance count function to run in a loop
@@ -156,9 +160,12 @@ if(constituency){
 //the magic, simple enough, append some divs and animate their width's to final position 
 //then animate their top to final position and move the name div at the same time
 function firstCount(){
+    console.log("firstCount");
     $("#thepost").height(candidates.length*30);
-    $(".countMarker").removeClass("completed")
-    setActiveMarker(1);
+    $(".countMarker").removeClass("completed");
+    $(".countMarker").removeClass("active");
+    $("#countMarker-1").addClass("active");
+    //setActiveMarker(1);
     for(var j=0;j<candidates.length;j++){
         $('<div id="cname'+candidates[j].id+'" class="candidateLabel '+candidates[j]["party"]+'_label" style="top:'+(topMargin+ (j*30)) +'px;left:10px;">'+candidates[j]["name"]+'</div>')
         .appendTo("#animation");
@@ -170,6 +177,10 @@ function firstCount(){
             start:function(){
                 $("#cname"+$(this).data('candidate'))
                 .animate({top:topMargin+(countDict[1][$(this).data('candidate')]["order"]*30)},500*speed)
+                if (!running) { 
+                    $(".active").addClass("completed");
+                    $(".countMarker").removeClass("active");    
+                }
             }
         });
     }
@@ -219,8 +230,10 @@ function advanceCount(){
                                     });
                                     //TODO:at this point we'd like to animate to new order
                                     $(this).remove();
-                                    $(".active").addClass("completed");
-                                    $(".countMarker").removeClass("active");    
+                                    if (!running) { 
+                                        $(".active").addClass("completed");
+                                        $(".countMarker").removeClass("active");    
+                                    }
                                 });
                             left = left + transfers[candidates[t].id] * qFactor;
                         }
@@ -232,7 +245,10 @@ function advanceCount(){
             }
         }
     }else{
+        running = false;
         clearInterval(loop);
+        $(".active").addClass("completed");
+        $(".countMarker").removeClass("active");
         $("#pause-replay").removeClass("fa-pause");
         $("#pause-replay").addClass("fa-repeat");
     }
@@ -277,11 +293,24 @@ function step(){
     }
 }
 
+function jumpToStep(i){
+    if (running) {
+        clearInterval(loop);
+    }
+    countNumber = i;
+    playStep(countNumber);
+    if (running) {
+        loop = window.setInterval(advanceCount,4000*speed);
+    }
+    if ($("#pause-replay").hasClass("fa-repeat")) {
+        $("#pause-replay").addClass("fa-play");
+    }
+}
+
 function again() {
     if (running) {
         clearInterval(loop);
     }
-
     if (earlyStage && countNumber>2) {
         countNumber-=2;
     }else if (countNumber>1) {
@@ -290,6 +319,9 @@ function again() {
     playStep(countNumber);
     if (running) {
         loop = window.setInterval(advanceCount,4000*speed);
+    }
+    if ($("#pause-replay").hasClass("fa-repeat")) {
+        $("#pause-replay").addClass("fa-play");
     }
 }
 
@@ -362,7 +394,6 @@ function adjustOrder(singleCountDict){
 }
 
 function updateCounter(n) {
-    console.log("Completed marker = #countMarker-" + n);
     $(".countMarker").removeClass("completed")
     for (i=1; i<n; i++) {
         $("#countMarker-" + i).addClass("completed")        
@@ -370,7 +401,6 @@ function updateCounter(n) {
 };
 
 function setActiveMarker(n) {
-    console.log("Active marker = #countMarker-" + n);
     $(".countMarker").removeClass("active")
     $("#countMarker-" + n).addClass("active")
 }
