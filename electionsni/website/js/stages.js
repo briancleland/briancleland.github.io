@@ -7,9 +7,11 @@ var speed = 1;
 var leftPadding = 10;
 var nameSpace = 200;
 var startLeft = leftPadding+nameSpace;
-var voteWidth = 600;
+var voteWidth = 200; // default = 600
+var postPosition = leftPadding + nameSpace + voteWidth;
 var running = true;
 var earlyStage = true;
+var topMargin = 20;
 
 var json = (function() {
         var json = null;
@@ -24,7 +26,6 @@ var json = (function() {
         });
         return json;
     })();
-console.log(json);
 var	constituency = json.Constituency.countInfo;
 var data = json.Constituency.countGroup;
 
@@ -36,7 +37,8 @@ if(constituency){
 	$("#constituency-span").text(constituencyCode);
     $("#quota-span").text(quota);
     $("#seats-span").text(seats);
-    $("#theline").css({top:3+(seats+1)*30});
+    $("#theline").css({top:14+(seats+1)*30});
+    $("#theline").width(postPosition);
     var qFactor = voteWidth/quota; //all actual vote counts are multiplied by this to get a div width in proportion
 
     /** 
@@ -79,8 +81,6 @@ if(constituency){
         }
         transferDict[data[i]["Count_Number"]][data[i]["Candidate_Id"]] = Math.max(0, parseInt(data[i]["Transfers"], 10));
 		
-		console.log(countDict);
-
         if (!(data[i]["Candidate_Id"] in candidatesDict)) {
             var party = data[i]["Party_Name"];
             if (typeof(party)!="string"){ party = "Non-Party";}
@@ -104,7 +104,7 @@ if(constituency){
     //once we have all the data in the countDict we can now go through each count and order it
     //we do this in order as once a candidate is elected we store their final order in the candidatesDict and reuse it subsquent counts
     //only sorting candidates that are not eliminated or elected
-
+    
     for (var k=1; k<=counts;k++){
         if (countDict.hasOwnProperty(k)) {
             adjustOrder(countDict[k]);
@@ -115,14 +115,16 @@ if(constituency){
 
     $("#pause-replay").click(function(event) {
         event.preventDefault();
-        if ($(this).text() == "Pause") {
-            $(this).text("Resume");
+        if ($(this).hasClass("fa-pause")) {
+            $(this).removeClass("fa-pause");
+            $(this).addClass("fa-play");
             pause();
-        } else if ($(this).text() == "Resume") {
-            $(this).text("Pause");
+        } else if ($(this).hasClass("fa-play")) {
+            $(this).removeClass("fa-play");
+            $(this).addClass("fa-pause");
             resume();
         } else {
-            $(this).text("Pause");
+            $(this).addClass("fa-pause");
             replay(1);
         }
     });
@@ -137,30 +139,51 @@ if(constituency){
         again();
     });
 
+    for (i = 1; i < counts+1; i++) {
+        var marker = $("<div class='countMarker' id='countMarker-" + i + " />");
+        $("#countMarkers").append("<div class='countMarker' id='countMarker-" + i + "'><p>" + i + "</p></div>");
+    }
+    
+    // bind click events to stage numbers
+    $(".countMarker").click(function (event) {
+        var id = parseInt($(this).attr('id').replace("countMarker-",""));
+        jumpToStep(id);
+    })
+        
     firstCount();  //run the first count
     var countNumber = 2;  //global loop variable
-    //set the advance count function to run in a loop
+    // set the advance count function to run in a loop
     var loop = window.setInterval(advanceCount,4000*speed);
 }else{
     //if we didn't load a constituency var then we have no data yet
-    $("body").text("There is no data up for this constituency at present");
+    $("#animation").text("There is no data up for this constituency at present");
 }
 
 //the magic, simple enough, append some divs and animate their width's to final position 
 //then animate their top to final position and move the name div at the same time
 function firstCount(){
+    console.log("firstCount");
     $("#thepost").height(candidates.length*30);
+    $("#thepost").css("left", postPosition); // set position of #thepost finishing line
+    $(".countMarker").removeClass("completed");
+    $(".countMarker").removeClass("active");
+    $("#countMarker-1").addClass("active");
+    //setActiveMarker(1);
     for(var j=0;j<candidates.length;j++){
-        $('<div id="cname'+candidates[j].id+'" class="candidateLabel '+candidates[j]["party"]+'_label" style="top:'+(40 + (j*30)) +'px;left:10px;">'+candidates[j]["name"]+'</div>')
-        .appendTo("body");
-        $('<div data-candidate="'+candidates[j].id+'" id="candidate'+candidates[j].id+'" class="votes '+candidates[j]["party"]+'" style="top:'+(40 + (j*30)) +'px;left:'+startLeft+'px;"></div>')
-        .appendTo("body")
+        $('<div id="cname'+candidates[j].id+'" class="candidateLabel '+candidates[j]["party"]+'_label" style="top:'+(topMargin+ (j*30)) +'px;left:10px;">'+candidates[j]["name"]+'</div>')
+        .appendTo("#animation");
+        $('<div data-candidate="'+candidates[j].id+'" id="candidate'+candidates[j].id+'" class="votes '+candidates[j]["party"]+'" style="top:'+(topMargin+ (j*30)) +'px;left:'+startLeft+'px;"></div>')
+        .appendTo("#animation")
         .animate({width:countDict[1][candidates[j].id]["total"] * qFactor},1500*speed).text(countDict[1][candidates[j].id]["total"]+ " " + countDict[1][candidates[j].id]["status"])
-        .animate({top:40+(countDict[1][candidates[j].id]["order"]*30)},{
+        .animate({top:topMargin+(countDict[1][candidates[j].id]["order"]*30)},{
             duration:500*speed,
             start:function(){
                 $("#cname"+$(this).data('candidate'))
-                .animate({top:40+(countDict[1][$(this).data('candidate')]["order"]*30)},500*speed)
+                .animate({top:topMargin+(countDict[1][$(this).data('candidate')]["order"]*30)},500*speed)
+                if (!running) { 
+                    $(".active").addClass("completed");
+                    $(".countMarker").removeClass("active");    
+                }
             }
         });
     }
@@ -175,21 +198,23 @@ function advanceCount(){
     if(countNumber in countDict){
         earlyStage = true;
         var i = countNumber;
+        setActiveMarker(countNumber);
         $("#count-span").text(countNumber);
+        updateCounter(countNumber);
         for (var j=0;j<candidates.length;j++) {
             if (countDict[i][candidates[j].id]["transfers"]) {
                 //we have to break it down now instead
                 $("#candidate"+candidates[j].id).width(countDict[i][candidates[j].id]["total"] * qFactor);
                 var transfers = transferDict[i];
                 var left = startLeft + countDict[i][candidates[j].id]["total"] * qFactor;
-                var top = 40 + (countDict[i-1][candidates[j].id]["order"]*30);
+                var top = topMargin+ (countDict[i-1][candidates[j].id]["order"]*30);
                 if (!transfered){
                     for (var t=0;t<candidates.length;t++) {
                         if (countDict[i][candidates[t].id]["transfers"] == false) {
                             var localLeft = startLeft+countDict[i-1][candidates[t].id]["total"] * qFactor;
                             $('<div data-candidate="'+candidates[t].id+'" style="width:'+transfers[candidates[t].id] * qFactor+'px;left:'+left+'px; top:'+top+'px;" class="votes '+candidates[t]["party"]+'"></div>')
-                                .appendTo("body").delay(300*speed)
-                                .animate({top:40 + (countDict[i-1][candidates[t].id]["order"]*30), left:startLeft+voteWidth+20},900*speed, function(){
+                                .appendTo("#animation").delay(300*speed)
+                                .animate({top:topMargin+ (countDict[i-1][candidates[t].id]["order"]*30), left:startLeft+voteWidth+20},900*speed, function(){
                                     earlyStage = false;
                                     if (transfers[$(this).data('candidate')] >0 ){
                                         $("#candidate"+$(this).data('candidate'))
@@ -199,15 +224,19 @@ function advanceCount(){
                                 .animate({left:localLeft},900*speed, function(){
                                     $("#candidate"+$(this).data('candidate')).width(countDict[i][$(this).data('candidate')]["total"] * qFactor)
                                     .text(countDict[i][$(this).data('candidate')]["total"] + " " + countDict[i][$(this).data('candidate')]["status"])
-                                    .animate({top:40+(countDict[i][$(this).data('candidate')]["order"]*30)},{
+                                    .animate({top:topMargin+(countDict[i][$(this).data('candidate')]["order"]*30)},{
                                         duration:500*speed,
                                         start:function(){
                                             $("#cname"+$(this).data('candidate'))
-                                            .animate({top:40+(countDict[i][$(this).data('candidate')]["order"]*30)},500*speed)
+                                            .animate({top:topMargin+(countDict[i][$(this).data('candidate')]["order"]*30)},500*speed)
                                         }
                                     });
                                     //TODO:at this point we'd like to animate to new order
                                     $(this).remove();
+                                    if (!running) { 
+                                        $(".active").addClass("completed");
+                                        $(".countMarker").removeClass("active");    
+                                    }
                                 });
                             left = left + transfers[candidates[t].id] * qFactor;
                         }
@@ -219,8 +248,12 @@ function advanceCount(){
             }
         }
     }else{
+        running = false;
         clearInterval(loop);
-        $("#pause-replay").text("Replay");
+        $(".active").addClass("completed");
+        $(".countMarker").removeClass("active");
+        $("#pause-replay").removeClass("fa-pause");
+        $("#pause-replay").addClass("fa-repeat");
     }
     countNumber += 1;
 
@@ -229,6 +262,8 @@ function advanceCount(){
 function pause(){
     clearInterval(loop);
     running = false;
+    $(".active").addClass("completed");
+    $(".active").removeClass("active");
 }
 
 function resume(){
@@ -261,11 +296,24 @@ function step(){
     }
 }
 
+function jumpToStep(i){
+    if (running) {
+        clearInterval(loop);
+    }
+    countNumber = i;
+    playStep(countNumber);
+    if (running) {
+        loop = window.setInterval(advanceCount,4000*speed);
+    }
+    if ($("#pause-replay").hasClass("fa-repeat")) {
+        $("#pause-replay").addClass("fa-play");
+    }
+}
+
 function again() {
     if (running) {
         clearInterval(loop);
     }
-
     if (earlyStage && countNumber>2) {
         countNumber-=2;
     }else if (countNumber>1) {
@@ -274,6 +322,9 @@ function again() {
     playStep(countNumber);
     if (running) {
         loop = window.setInterval(advanceCount,4000*speed);
+    }
+    if ($("#pause-replay").hasClass("fa-repeat")) {
+        $("#pause-replay").addClass("fa-play");
     }
 }
 
@@ -289,10 +340,10 @@ function playStep(i){
         $(".votes").remove();
         if (i>1){
             for(var j=0;j<candidates.length;j++){
-                $('<div id="cname'+candidates[j].id+'" class="candidateLabel '+candidates[j]["party"]+'_label" style="top:'+(40 + (countDict[i-1][candidates[j].id]["order"]*30)) +'px;left:10px;">'+candidates[j]["name"]+'</div>')
-                .appendTo("body");
-                $('<div data-candidate="'+candidates[j].id+'" id="candidate'+candidates[j].id+'" class="votes '+candidates[j]["party"]+'" style="top:'+(40 + (countDict[i-1][candidates[j].id]["order"]*30)) +'px;left:'+startLeft+'px;"></div>')
-                .appendTo("body");
+                $('<div id="cname'+candidates[j].id+'" class="candidateLabel '+candidates[j]["party"]+'_label" style="top:'+(topMargin+ (countDict[i-1][candidates[j].id]["order"]*30)) +'px;left:10px;">'+candidates[j]["name"]+'</div>')
+                .appendTo("#animation");
+                $('<div data-candidate="'+candidates[j].id+'" id="candidate'+candidates[j].id+'" class="votes '+candidates[j]["party"]+'" style="top:'+(topMargin+ (countDict[i-1][candidates[j].id]["order"]*30)) +'px;left:'+startLeft+'px;"></div>')
+                .appendTo("#animation");
                 $("#candidate"+candidates[j].id).width(countDict[i-1][candidates[j].id]["total"] * qFactor).text(countDict[i-1][candidates[j].id]["total"]);
             }
             advanceCount();
@@ -343,4 +394,16 @@ function adjustOrder(singleCountDict){
             candidatesDict[copy[i]["key"]].status = singleCountDict[copy[i]["key"]]["status"];
         }
     }
+}
+
+function updateCounter(n) {
+    $(".countMarker").removeClass("completed")
+    for (i=1; i<n; i++) {
+        $("#countMarker-" + i).addClass("completed")        
+    }
+};
+
+function setActiveMarker(n) {
+    $(".countMarker").removeClass("active")
+    $("#countMarker-" + n).addClass("active")
 }

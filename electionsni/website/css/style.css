@@ -234,23 +234,6 @@ header p {
 .Democracy-First{fill:#d7761d!important; background:#d7761d!important; color:#fff}
 .Animal-Welfare-Party{fill:#ce1d99!important; background:#ce1d99!important; color:#fff}
 
-#thepost{
-    width:2px;
-    background-color:black;
-    position:absolute;
-    top:40px;
-    left:810px;
-    height:0px;
-}
-
-#theline{
-    height:2px;
-    background-color:black;
-    position:absolute;
-    top:0px;
-    width:803px;
-}
-
 #constituency{
     position:absolute;
 	margin-left:600px;
