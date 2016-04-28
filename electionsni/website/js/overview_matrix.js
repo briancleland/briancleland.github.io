@@ -77,23 +77,24 @@ $.each(constituencies, function(i, constituency) {
     };
 });
 
-var results = (function () {
-  var results = null;
-  $.ajax({
-      'async': false,
-      'global': false,
-      'url': "2011" + "/constituency/" + "belfast-east" + "/ResultsJson.json",
-      'dataType': "json",
-      'success': function (data) {
-        results = data;
-      },
-
-    })
-    .fail(function (e) {
-      console.log(e)
-    });
-  return results;
-})();
+$.each(constituencies, function(i, constituency) {
+  var results = [];
+  results.push(function () {
+    return $.ajax({
+        'async': false,
+        'global': false,
+        'url': "2011" + "/constituency/" + "belfast-east" + "/ResultsJson.json",
+        'dataType': "json",
+        'success': function (data) {
+          results = data;
+        }
+      })
+      .fail(function (e) {
+        console.log(e)
+      });
+    return results;
+  });
+});
 
 console.log("results", results);
 
