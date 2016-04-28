@@ -8,8 +8,10 @@ var loop;
 
 function animateStages(year,constituencyFolder) {
     
+    clearInterval(loop);
     $("#animation").html("");
-    clearInterval(loop)
+    $("#animation").append("<div id='thepost' />")
+    $("#animation").append("<div id='theline' />")
     
     var speed = 1;
     var leftPadding = 10;
@@ -173,7 +175,6 @@ function animateStages(year,constituencyFolder) {
     //the magic, simple enough, append some divs and animate their width's to final position 
     //then animate their top to final position and move the name div at the same time
     function firstCount(){
-        console.log("firstCount");
         $("#thepost").height(candidates.length*30);
         $("#thepost").css("left", postPosition); // set position of #thepost finishing line
         $(".stageNumber").removeClass("completed");
@@ -205,7 +206,6 @@ function animateStages(year,constituencyFolder) {
     //then animate them accross to end of candidates vote pile, when complete remove the new div and update the candidates div width
     //finally run the reorder animation
     function advanceCount(){
-        console.log("running advancecount for " + constituencyFolder);
         var transfered=false;
         if(countNumber in countDict){
             earlyStage = true;
