@@ -5,139 +5,133 @@ var constituencies = ["Belfast East", "Belfast North", "Belfast South", "Belfast
   "Mid Ulster", "Newry and Armagh", "North Antrim", "North Down", "South Antrim", "South Down",
   "Strangford", "Upper Bann", "West Tyrone"];
 
-var parties = [{
-  name: "Alliance Party",
-  short: "APNI",
-  colour: "#ffe600"
-}, {
-  name: "Democratic Unionist Party",
-  short: "DUP",
-  colour: "#ff8000"
-}, {
-  name: "Independent",
-  short: "IND",
-  colour: "#669999"
-}, {
-  name: "Sinn Fein",
-  short: "SF",
-  colour: "#009900"
-}, {
-  name: "Social Democratic and Labour Party",
-  short: "SDLP",
-  colour: "#cc3300"
-}, {
-  name: "Traditional Unionist Voice",
-  short: "TUV",
-  colour: "#0000e6"
-}, {
-  name: "UK Independence Party",
-  short: "UKIP",
-  colour: "#cc00cc"
-}, {
-  name: "Ulster Unionist Party",
-  short: "UUP",
-  colour: "#62cae7"
-}, {
-  name: "People Before Profit Alliance",
-  short: "PBP",
-  colour: "#ff3399"
-}, {
-  name: "Workers Party",
-  short: "WP",
-  colour: "#ff0000"
-}, {
-  name: "Procapitalism",
-  short: "CAP",
-  colour: "#f633ff"
-}, {
-  name: "Socialist Party(NI)",
-  short: "SP",
-  colour: "#e60000"
-}, {
-  name: "British Nationalist Party",
-  short: "BNP",
-  colour: "#b7bdff"
-}, {
-  name: "Progressive Unionist Party",
-  short: "PUP",
-  colour: "#1e0082"
-}]
+var parties = {
+  "Alliance Party": {
+    "Party_Id": 19,
+    "Party_Abbreviation": "APNI",
+    "Hex_Col": "#ffe600"
+  },
+  "Democratic Unionist Party": {
+    "Party_Id": 20,
+    "Party_Abbreviation": "DUP",
+    "Hex_Col": "#ff8000"
+  },
+  "Green Party": {
+    "Party_Id": 111,
+    "Party_Abbreviation": "GPNI",
+    "Hex_Col": "#33ff33"
+  },
+  "Independent": {
+    "Party_Id": 21,
+    "Party_Abbreviation": "IND",
+    "Hex_Col": "#669999"
+  },
+  "NI21": {
+    "Party_Id": 918,
+    "Party_Abbreviation": "NI21",
+    "Hex_Col": "#581845"
+  },
+  "Sinn Fein": {
+    "Party_Id": 24,
+    "Party_Abbreviation": "SF",
+    "Hex_Col": "#009900"
+  },
+  "Social Democratic and Labour Party": {
+    "Party_Id": 23,
+    "Party_Abbreviation": "SDLP",
+    "Hex_Col": "#cc3300"
+  },
+  "Traditional Unionist Voice": {
+    "Party_Id": 141,
+    "Party_Abbreviation": "TUV",
+    "Hex_Col": "#0000e6"
+  },
+  "UK Independence Party": {
+    "Party_Id": 689,
+    "Party_Abbreviation": "UKIP",
+    "Hex_Col": "#cc00cc"
+  },
+  "Ulster Unionist Party": {
+    "Party_Id": 26,
+    "Party_Abbreviation": "UUP",
+    "Hex_Col": "#62cae7"
+  },
+  "People Before Profit Alliance": {
+    "Party_Id": 999,
+    "Party_Abbreviation": "PBP",
+    "Hex_Col": "#ff3399"
+  },
+  "Workers Party": {
+    "Party_Id": 998,
+    "Party_Abbreviation": "WP",
+    "Hex_Col": "#ff0000"
+  },
+  "Procapitalism": {
+    "Party_Id": 997,
+    "Party_Abbreviation": "CAP",
+    "Hex_Col": "#f633ff"
+  },
+  "Socialist Party (NI)": {
+    "Party_Id": 996,
+    "Party_Abbreviation": "SP",
+    "Hex_Col": "#e60000"
+  },
+  "British Nationalist Party": {
+    "Party_Id": 995,
+    "Party_Abbreviation": "BNP",
+    "Hex_Col": "#b7bdff"
+  },
+  "Progressive Unionist Party": {
+    "Party_Id": 994,
+    "Party_Abbreviation": "PUP",
+    "Hex_Col": "#1e0082"
+  }
+}
 
 var data = [];
 
 $.each(constituencies, function (i, constituency) {
-  var numElected = Math.floor(Math.random() * 7) + 2
-  for (i = 1; i < numElected; i++) {
-    var party = parties[Math.floor(Math.random() * parties.length)];
-    data.push({
-      constituency: constituency,
-      candidate: "Joe Bloggs",
-      party_name: party.name,
-      party_short: party.short,
-      party_colour: party.colour,
-      count: i
-    });
-  };
-});
-
-$.each(constituencies, function (i, constituency) {
-  var name = constituency.replace(" and ","-").replace(" ","-").toLowerCase();
-  $("#overview_matrix").append("<div id='" + name + "' class='constituency'/>");
-  $("#" + name).append("<div class='name'>" + constituency + "</div>");
-  $("#" + name).append("<div class='results' />");
-});
-
-
-var results = function () {
+  var cname = constituency.replace(" and ", "-").replace(" ", "-").toLowerCase();
+  $("#overview_matrix").append("<div id='" + cname + "' class='constituency'/>");
+  $("#" + cname).append("<div class='name'>" + constituency + "</div>");
+  $("#" + cname).append("<div class='results' />");
   $.ajax({
       'async': false,
       'global': false,
-      'url': "2011" + "/constituency/" + "belfast-east" + "/ResultsJson.json",
+      'url': "2011/constituency/" + cname + "/ResultsJson.json",
       'dataType': "json",
       'success': function (data) {
-        results = data;
         var electedReps = getElected(data);
-        console.log(electedReps);
-        $.each(electedReps, function(i, rep){
+        $.each(electedReps, function (i, rep) {
           var id = rep.Candidate_Id;
           var result = "<div id='" + id + "' class='result' />";
-          $("#belfast-east .results").append(result);
-          var name = rep.Surname + ", " + rep.Firstname;
-          $("#" + id).data("name", name);
+          $("#" + cname + " .results").append(result);
+          var thisResult = $("#" + id);
+          var name = rep.Firstname + " " + rep.Surname;
+          var party = parties[rep.Party_Name].Party_Abbreviation;
+          var votes = rep.Candidate_First_Pref_Votes;
+          var colour = parties[rep.Party_Name].Hex_Col;
+          thisResult.css("background", colour);
+          thisResult.hover(
+            function () {
+              $(this).css("opacity", 0.5);
+              $("#tooltip").show();
+              $("#tooltip").html(
+                name + " (" + party + ")<br>" +
+                votes + " first pref votes"
+              );
+            },
+            function () {
+              $(this).css("opacity", 1);
+              $("#tooltip").hide();
+            });
         });
       }
     })
     .fail(function (e) {
       console.log(e)
     });
-  return results;
-};
-
-console.log("results", results());
-
-//$.get("website/json/overviewSpec.json", function(json) {
-//    var spec = JSON5.parse(json);
-//    spec.data = [{"name": "results","values": data}];
-//    vg.parse.spec(spec, function(chart) {
-//        var view = chart({
-//                el: "#overview_matrix"
-//            })
-//            .on("mouseover", function(event, item) {
-//                if (item && item.datum.candidate) {
-//                    console.log(item);
-//                    $('#tooltip').show();
-//                    $('#tooltip').html(
-//                        "<b>" + item.datum.candidate + "</b><br>" +
-//                        item.datum.party_name
-//                    );
-//                } else {
-//                    $('#tooltip').hide();
-//                }
-//            })
-//            .update();
-//    });
-//},"text");
-//}
+});
 
 function getElected(data) {
   var counts = data.Constituency.countGroup;
@@ -146,5 +140,13 @@ function getElected(data) {
   var electedReps = counts.filter(function(count){
     return (count.Count_Number == finalStage && count.Status =="Elected");
   });
-  return electedReps;
+  function compare(a,b) {
+  if (a.Candidate_First_Pref_Votes < b.Candidate_First_Pref_Votes)
+    return 1;
+  else if (a.Candidate_First_Pref_Votes > b.Candidate_First_Pref_Votes)
+    return -1;
+  else 
+    return 0;
+  }
+  return electedReps.sort(compare);
 }
