@@ -77,9 +77,27 @@ $.each(constituencies, function(i, constituency) {
     };
 });
 
-console.log(data);
+var results = (function () {
+  var results = null;
+  $.ajax({
+      'async': false,
+      'global': false,
+      'url': "2011" + "/constituency/" + "belfast-east" + "/ResultsJson.json",
+      'dataType': "json",
+      'success': function (data) {
+        results = data;
+      },
 
-$.get("website/json/spec.json", function(json) {
+    })
+    .fail(function (e) {
+      console.log(e)
+    });
+  return results;
+})();
+
+console.log("results", results);
+
+$.get("website/json/overviewSpec.json", function(json) {
     var spec = JSON5.parse(json);
     spec.data = [{"name": "results","values": data}];
     vg.parse.spec(spec, function(chart) {
