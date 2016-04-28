@@ -78,6 +78,14 @@
     padding: 4px 10px;
 }
 
+#menuBar select {
+    float: left;
+    margin-right: 10px;
+    font-size: 14px;
+    border: 0px;
+    margin-top: 7px;
+}
+
 #constituency {
     float: left !important;
     position: relative !important;
@@ -99,4 +107,3 @@
     top:193px;
     width:803px;
 }
-

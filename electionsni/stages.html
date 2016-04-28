@@ -4,6 +4,7 @@
 <head>
     <meta charset='utf-8'>
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="website/js/stages.js"></script>
 
 <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">-->
     <link rel="stylesheet" href="website/css/font-awesome.min.css">
@@ -18,8 +19,16 @@
 <body>
 
     <div id="menuBar">
+        <select id="constituencySelect">
+        </select>
+        <select id="yearSelect">
+            <option>2011</option>
+            <option>2016</option>
+        </select>
         <div id="constituency">
-            <b><span id="constituency-span"></span></b> Quota <span id="quota-span"></span>
+            <b><span id="constituency-span"></span></b>
+            Quota
+            <span id="quota-span"></span>
         </div>
         <div id="controls">
             <a href="#Again" id="again" class="fa fa-step-backward"></a>
@@ -35,7 +44,22 @@
     </div>
 
 </body>
+    
+    <script>
+        var year = $("#yearSelect :selected").text();
+        $.getJSON(year + "/NI/all-constituency-info.json", function(data) {
+            var constituencies = data.Constituencies;
+            var constituencySelect = $("#constituencySelect");
+            $.each(constituencies, function(i, constituency){
+                var name = constituency.Constituency_Name;
+                var folder = name.toLowerCase().replace(" ","-");
+                console.log("folder", folder);
+                console.log(constituencySelect);
+                $(constituencySelect).append($("<option/>").val(folder).text(name))
+            })
+        })
+        animateStages();
+    </script>
 
-    <script src="website/js/stages.js"></script>
     
 </html>
