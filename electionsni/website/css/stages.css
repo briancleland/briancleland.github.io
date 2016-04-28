@@ -22,13 +22,13 @@
     position: relative;
 }
 
-#countMarkers {
+#stageNumbers {
     padding: 8px;
     margin: 0 !important;
     float: left;
 }
 
-#countMarkers:before {
+#stageNumbers:before {
     content: "Stages:";
     float: left;
     margin: 1px 10px 0 0;
@@ -36,7 +36,7 @@
     color: #888;
 } 
 
-.countMarker {
+.stageNumber {
     width: 20px;
     height: 20px;
     background: #ddd;
@@ -47,19 +47,19 @@
     cursor: pointer;
 }
 
-.countMarker.completed {
+.stageNumber.completed {
     color: white;
     background: #4b9b4b;
 }
 
-.countMarker.active {
+.stageNumber.active {
     color: white;
     background: #4b9b4b;
     -webkit-animation: pulsate 1s ease-out;
     -webkit-animation-iteration-count: infinite; 
 }
 
-.countMarker p {
+.stageNumber p {
     margin: 0;
     vertical-align: middle;
     line-height: 20px;

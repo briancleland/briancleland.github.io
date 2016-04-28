@@ -35,7 +35,7 @@
             <a href="#Pause" id="pause-replay" class="fa fa-pause"></a>
             <a href="#Next" id="step" class="fa fa-step-forward"></a>
         </div>
-        <div id="countMarkers"></div>
+        <div id="stageNumbers"></div>
     </div>
     
     <div id="animation">
@@ -53,12 +53,14 @@
             $.each(constituencies, function(i, constituency){
                 var name = constituency.Constituency_Name;
                 var folder = name.toLowerCase().replace(" ","-");
-                console.log("folder", folder);
-                console.log(constituencySelect);
                 $(constituencySelect).append($("<option/>").val(folder).text(name))
             })
+            constituencySelect.change(function() {
+                var constituencyFolder = $("#constituencySelect :selected").val();
+                animateStages(year, constituencyFolder);
+            })
         })
-        animateStages();
+//        animateStages();
     </script>
 
     

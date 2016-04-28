@@ -3,7 +3,14 @@
  */
 
 //some control variables
-function animateStages() {
+
+var loop;
+
+function animateStages(year,constituencyFolder) {
+    
+    $("#animation").html("");
+    clearInterval(loop)
+    
     var speed = 1;
     var leftPadding = 10;
     var nameSpace = 200;
@@ -19,12 +26,14 @@ function animateStages() {
             $.ajax({
                 'async': false,
                 'global': false,
-                'url': "ResultsJson.json",
+                'url': year + "/constituency/" + constituencyFolder + "/ResultsJson.json",
                 'dataType': "json",
                 'success': function (data) {
                     json = data;
-                }
-            });
+                },
+                
+            })
+            .fail(function(e){console.log(e)});
             return json;
         })();
     var	constituency = json.Constituency.countInfo;
@@ -140,21 +149,22 @@ function animateStages() {
             again();
         });
 
+        $("#stageNumbers").html("");
         for (i = 1; i < counts+1; i++) {
-            var marker = $("<div class='countMarker' id='countMarker-" + i + " />");
-            $("#countMarkers").append("<div class='countMarker' id='countMarker-" + i + "'><p>" + i + "</p></div>");
+            var marker = $("<div class='stageNumber' id='stageNumber-" + i + " />");
+            $("#stageNumbers").append("<div class='stageNumber' id='stageNumber-" + i + "'><p>" + i + "</p></div>");
         }
 
         // bind click events to stage numbers
-        $(".countMarker").click(function (event) {
-            var id = parseInt($(this).attr('id').replace("countMarker-",""));
+        $(".stageNumber").click(function (event) {
+            var id = parseInt($(this).attr('id').replace("stageNumber-",""));
             jumpToStep(id);
         })
 
         firstCount();  //run the first count
         var countNumber = 2;  //global loop variable
         // set the advance count function to run in a loop
-        var loop = window.setInterval(advanceCount,4000*speed);
+        loop = window.setInterval(advanceCount,4000*speed);
     }else{
         //if we didn't load a constituency var then we have no data yet
         $("#animation").text("There is no data up for this constituency at present");
@@ -166,9 +176,9 @@ function animateStages() {
         console.log("firstCount");
         $("#thepost").height(candidates.length*30);
         $("#thepost").css("left", postPosition); // set position of #thepost finishing line
-        $(".countMarker").removeClass("completed");
-        $(".countMarker").removeClass("active");
-        $("#countMarker-1").addClass("active");
+        $(".stageNumber").removeClass("completed");
+        $(".stageNumber").removeClass("active");
+        $("#stageNumber-1").addClass("active");
         //setActiveMarker(1);
         for(var j=0;j<candidates.length;j++){
             $('<div id="cname'+candidates[j].id+'" class="candidateLabel '+candidates[j]["party"]+'_label" style="top:'+(topMargin+ (j*30)) +'px;left:10px;">'+candidates[j]["name"]+'</div>')
@@ -183,7 +193,7 @@ function animateStages() {
                     .animate({top:topMargin+(countDict[1][$(this).data('candidate')]["order"]*30)},500*speed)
                     if (!running) { 
                         $(".active").addClass("completed");
-                        $(".countMarker").removeClass("active");    
+                        $(".stageNumber").removeClass("active");    
                     }
                 }
             });
@@ -195,6 +205,7 @@ function animateStages() {
     //then animate them accross to end of candidates vote pile, when complete remove the new div and update the candidates div width
     //finally run the reorder animation
     function advanceCount(){
+        console.log("running advancecount for " + constituencyFolder);
         var transfered=false;
         if(countNumber in countDict){
             earlyStage = true;
@@ -236,7 +247,7 @@ function animateStages() {
                                         $(this).remove();
                                         if (!running) { 
                                             $(".active").addClass("completed");
-                                            $(".countMarker").removeClass("active");    
+                                            $(".stageNumber").removeClass("active");    
                                         }
                                     });
                                 left = left + transfers[candidates[t].id] * qFactor;
@@ -252,7 +263,7 @@ function animateStages() {
             running = false;
             clearInterval(loop);
             $(".active").addClass("completed");
-            $(".countMarker").removeClass("active");
+            $(".stageNumber").removeClass("active");
             $("#pause-replay").removeClass("fa-pause");
             $("#pause-replay").addClass("fa-repeat");
         }
@@ -398,14 +409,14 @@ function animateStages() {
     }
 
     function updateCounter(n) {
-        $(".countMarker").removeClass("completed")
+        $(".stageNumber").removeClass("completed")
         for (i=1; i<n; i++) {
-            $("#countMarker-" + i).addClass("completed")        
+            $("#stageNumber-" + i).addClass("completed")        
         }
     };
 
     function setActiveMarker(n) {
-        $(".countMarker").removeClass("active")
-        $("#countMarker-" + n).addClass("active")
+        $(".stageNumber").removeClass("active")
+        $("#stageNumber-" + n).addClass("active")
     }
 }
