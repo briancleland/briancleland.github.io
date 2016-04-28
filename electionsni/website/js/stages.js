@@ -46,8 +46,7 @@ function animateStages(year,constituencyFolder) {
         var constituencyCode = constituency["Constituency_Name"];
         var quota = parseInt(constituency["Quota"]);
         var seats = parseInt(constituency["Number_Of_Seats"]);
-        $("#constituency-span").text(constituencyCode);
-        $("#quota-span").text(quota);
+        $("#quota").text("Quota: " + quota);
         $("#seats-span").text(seats);
         $("#theline").css({top:14+(seats+1)*30});
         $("#theline").width(postPosition);
