@@ -12,7 +12,12 @@ function animateStages(year,constituencyFolder) {
     $("#animation").html("");
     $("#animation").append("<div id='thepost' />")
     $("#animation").append("<div id='theline' />")
-    
+    var playButton = $("#pause-replay");
+    playButton.unbind();
+    if (playButton.hasClass("fa-play")) {
+        playButton.removeClass("fa-play");
+        playButton.addClass("fa-pause");
+    }
     var speed = 1;
     var leftPadding = 10;
     var nameSpace = 200;
@@ -123,7 +128,7 @@ function animateStages(year,constituencyFolder) {
         }
 
         //now we have the data set up we just hook up our links to functions
-
+        
         $("#pause-replay").click(function(event) {
             event.preventDefault();
             if ($(this).hasClass("fa-pause")) {
