@@ -1,40 +1,49 @@
 #overview_container {
-    margin: 20px auto;
-    overflow: auto;
-    width: 1100px;
+  margin: 20px auto;
+  overflow: auto;
+  width: 1100px;
 }
 
 #overview_map {
-    float: left;
-    height: 425px;
-    width: 550px;
-    max-width: 50%;
-    margin: 0 20px 20px 0;
-    background: #fff;
+  float: left;
+  height: 425px;
+  width: 550px;
+  max-width: 50%;
+  margin: 0 20px 0 0;
+  background: #fff;
 }
 
-#overview_matrix {
-    float: left;
+#overview_matrix,
+#party_matrix {
+  float: left;
+}
+
+#party_matrix {
+  width: 100%;
+  border-top: 1px solid #ccc;
+  padding-top: 30px;
 }
 
 #tooltip {
-    display: none;
-    position: absolute;
-    float: left;
-    background-color: #444;
-    padding: 10px;
-    z-index: 1000;
-    font-size: 80%;
-    color: #fff;
-    font-family: sans-serif;
-    line-height: 16px;
+  display: none;
+  position: absolute;
+  float: left;
+  background-color: #444;
+  padding: 10px;
+  z-index: 1000;
+  font-size: 80%;
+  color: #fff;
+  font-family: sans-serif;
+  line-height: 16px;
 }
 
-#overview_matrix .constituency {
+#overview_matrix .constituency,
+#party_matrix .party {
   height: 22px;
 }
 
-#overview_matrix .name {
+#overview_matrix .name,
+#party_matrix .name {
   font-size: 12px;
   color: black;
   text-align: right;
@@ -44,16 +53,21 @@
   margin-right: 10px;
 }
 
-#overview_matrix .results {
-/*  width: 100px;*/
+#party_matrix .name {
+  width: 200px;  
+}
+
+#overview_matrix .results,
+#party_matrix .results {
+  /*  width: 100px;*/
   height: 10px;
   float: left;
 }
 
-#overview_matrix .results .result {
+#overview_matrix .results .result,
+#party_matrix .results .result {
   width: 12px;
   height: 12px;
-  background: green;
   float: left;
   margin-right: 2px;
   margin-top: 4px;

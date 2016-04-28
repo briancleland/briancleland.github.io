@@ -90,6 +90,14 @@ var parties = {
 
 var data = [];
 
+$.each(parties, function(i,party){
+  var pname = party.Party_Abbreviation;
+  $("#party_matrix").append("<div id='" + pname + "' class='party'/>");
+  $("#" + pname).append("<div class='name'>" + i + "</div>");
+  $("#" + pname).append("<div class='results' />");
+//  $("#" + pname).css("background", party.Hex_Col);
+});
+
 $.each(constituencies, function (i, constituency) {
   var cname = constituency.replace(" and ", "-").replace(" ", "-").toLowerCase();
   $("#overview_matrix").append("<div id='" + cname + "' class='constituency'/>");
@@ -104,11 +112,12 @@ $.each(constituencies, function (i, constituency) {
         var electedReps = getElected(data);
         $.each(electedReps, function (i, rep) {
           var id = rep.Candidate_Id;
-          var result = "<div id='" + id + "' class='result' />";
+          var result = "<div class='result " + id + "' />";
           $("#" + cname + " .results").append(result);
-          var thisResult = $("#" + id);
-          var name = rep.Firstname + " " + rep.Surname;
           var party = parties[rep.Party_Name].Party_Abbreviation;
+          $("#" + party + " .results").append(result);
+          var thisResult = $("." + id);
+          var name = rep.Firstname + " " + rep.Surname;
           var votes = rep.Candidate_First_Pref_Votes;
           var colour = parties[rep.Party_Name].Hex_Col;
           thisResult.css("background", colour);
@@ -126,7 +135,7 @@ $.each(constituencies, function (i, constituency) {
               $("#tooltip").hide();
             });
         });
-      }
+      } 
     })
     .fail(function (e) {
       console.log(e)
