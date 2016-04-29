@@ -90,19 +90,22 @@ var parties = {
 
 var data = [];
 
+// create party divs
 $.each(parties, function(i,party){
   var pname = party.Party_Abbreviation;
   $("#party_matrix").append("<div id='" + pname + "' class='party'/>");
   $("#" + pname).append("<div class='name'>" + i + "</div>");
   $("#" + pname).append("<div class='results' />");
-//  $("#" + pname).css("background", party.Hex_Col);
 });
 
+// iterate thru constituencies and populate results 
 $.each(constituencies, function (i, constituency) {
   var cname = constituency.replace(" and ", "-").replace(" ", "-").toLowerCase();
+  // first, create the constituency div
   $("#overview_matrix").append("<div id='" + cname + "' class='constituency'/>");
   $("#" + cname).append("<div class='name'>" + constituency + "</div>");
   $("#" + cname).append("<div class='results' />");
+  // now request the constituency results
   $.ajax({
       'async': false,
       'global': false,
@@ -110,6 +113,7 @@ $.each(constituencies, function (i, constituency) {
       'dataType': "json",
       'success': function (data) {
         var electedReps = getElected(data);
+        // for each elected rep, add a result element to the constituency and party results
         $.each(electedReps, function (i, rep) {
           var id = rep.Candidate_Id;
           var result = "<div class='result " + id + "' />";
@@ -162,8 +166,6 @@ $.each(constituencies, function (i, constituency) {
     $("#"+party.Party_Abbreviation).css("top",i*20+0);
   })
 
-
-console.log(parties);
 
 function getElected(data) {
   var counts = data.Constituency.countGroup;
