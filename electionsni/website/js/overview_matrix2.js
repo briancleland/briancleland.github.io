@@ -98,22 +98,23 @@ $.each(parties, function(i,party){
   $("#" + pname).append("<div class='results' />");
 });
 
-// iterate thru constituencies and populate results 
+// iterate thru constituencies
 $.each(constituencies, function (i, constituency) {
   var cname = constituency.replace(" and ", "-").replace(" ", "-").toLowerCase();
-  // first, create the constituency div
+  // create the constituency div
   $("#overview_matrix").append("<div id='" + cname + "' class='constituency'/>");
   $("#" + cname).append("<div class='name'>" + constituency + "</div>");
   $("#" + cname).append("<div class='results' />");
-  // now request the constituency results
+  // request the constituency results data
   $.ajax({
       'async': false,
       'global': false,
       'url': "2011/constituency/" + cname + "/ResultsJson.json",
       'dataType': "json",
       'success': function (data) {
+        // get the elected reps from the data
         var electedReps = getElected(data);
-        // for each elected rep, add a result element to the constituency and party results
+        // for each elected rep, add a result element to the constituency and party divs
         $.each(electedReps, function (i, rep) {
           var id = rep.Candidate_Id;
           var result = "<div class='result " + id + "' />";
@@ -148,7 +149,7 @@ $.each(constituencies, function (i, constituency) {
     });
 });
 
-// re-order party results according to greatest num_elected
+  // sort parties according to greatest num_elected
   function compareElected(a,b) {
   if (a.Num_Elected < b.Num_Elected)
     return 1;
@@ -161,7 +162,6 @@ $.each(constituencies, function (i, constituency) {
     party.Num_Elected = party.Num_Elected || 0;
     return party 
   });
-  console.log(partyArray.sort(compareElected));
   $.each(partyArray, function(i, party){
     $("#"+party.Party_Abbreviation).css("top",i*20+0);
   })
