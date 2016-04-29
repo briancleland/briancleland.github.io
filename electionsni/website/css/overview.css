@@ -1,6 +1,6 @@
 #overview_container {
   margin: 20px auto;
-  overflow: auto;
+/*  overflow: auto;*/
   width: 1100px;
 }
 
@@ -20,8 +20,15 @@
 
 #party_matrix {
   width: 100%;
-  border-top: 1px solid #ccc;
-  padding-top: 30px;
+/*  border-top: 1px solid #ccc;*/
+  position: relative;
+  height: 380px;
+  width: 800px;
+  margin-left: 30px;
+}
+
+#overview_matrix {
+  margin-bottom: 40px;
 }
 
 #tooltip {
@@ -40,6 +47,10 @@
 #overview_matrix .constituency,
 #party_matrix .party {
   height: 22px;
+}
+
+#party_matrix .party {
+  position: absolute;
 }
 
 #overview_matrix .name,

@@ -113,9 +113,11 @@ $.each(constituencies, function (i, constituency) {
         $.each(electedReps, function (i, rep) {
           var id = rep.Candidate_Id;
           var result = "<div class='result " + id + "' />";
-          $("#" + cname + " .results").append(result);
+          $("#" + cname + " .results").append(result); // add result to constituency div
           var party = parties[rep.Party_Name].Party_Abbreviation;
-          $("#" + party + " .results").append(result);
+          $("#" + party + " .results").append(result); // add result to party div
+          // increment num_elected for this party
+          parties[rep.Party_Name].Num_Elected = parties[rep.Party_Name].Num_Elected + 1 || 1;
           var thisResult = $("." + id);
           var name = rep.Firstname + " " + rep.Surname;
           var votes = rep.Candidate_First_Pref_Votes;
@@ -142,6 +144,27 @@ $.each(constituencies, function (i, constituency) {
     });
 });
 
+// re-order party results according to greatest num_elected
+  function compareElected(a,b) {
+  if (a.Num_Elected < b.Num_Elected)
+    return 1;
+  else if (a.Num_Elected > b.Num_Elected)
+    return -1;
+  else 
+    return 0;
+  }
+  var partyArray = $.map(parties, function(party) { 
+    party.Num_Elected = party.Num_Elected || 0;
+    return party 
+  });
+  console.log(partyArray.sort(compareElected));
+  $.each(partyArray, function(i, party){
+    $("#"+party.Party_Abbreviation).css("top",i*20+0);
+  })
+
+
+console.log(parties);
+
 function getElected(data) {
   var counts = data.Constituency.countGroup;
   var finalStage = Math.max.apply(Math,counts.map(function(o){return o.Count_Number;}));
@@ -149,7 +172,7 @@ function getElected(data) {
   var electedReps = counts.filter(function(count){
     return (count.Count_Number == finalStage && count.Status =="Elected");
   });
-  function compare(a,b) {
+  function compareVotes(a,b) {
   if (a.Candidate_First_Pref_Votes < b.Candidate_First_Pref_Votes)
     return 1;
   else if (a.Candidate_First_Pref_Votes > b.Candidate_First_Pref_Votes)
@@ -157,5 +180,5 @@ function getElected(data) {
   else 
     return 0;
   }
-  return electedReps.sort(compare);
+  return electedReps.sort(compareVotes);
 }
