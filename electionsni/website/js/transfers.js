@@ -96,7 +96,7 @@ $.each(constituencies, function(i, constituency) {
 })
 
 var transferData = {};
-$.getJSON("2011/ni/party-transfers.json", function (json) {
+$.getJSON("2011/NI/party-transfers.json", function (json) {
     console.log(json);
     var transfers = {};
     $.each(json, function (i, constituency) {
