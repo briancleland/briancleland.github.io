@@ -1,0 +1,38 @@
+#transferMenu {
+    width: 100%;
+    background: #fff;
+    padding: 10px;
+    overflow: auto;
+    margin-bottom: 10px;
+}
+
+#transferMenu select,
+#transferMenu .label {
+    float: left;
+    border: 0;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+#transferMenu .label {
+    color: #666;
+    padding-top: 2px;
+}
+
+#transferMenu select {
+    background: #34495e;
+    color: white;
+}
+
+#tooltip {
+  display: none;
+  position: absolute;
+  float: left;
+  background-color: #444;
+  padding: 10px;
+  z-index: 1000;
+  font-size: 80%;
+  color: #fff;
+  font-family: sans-serif;
+  line-height: 16px;
+}
