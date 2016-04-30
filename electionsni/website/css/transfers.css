@@ -1,9 +1,8 @@
 #transferMenu {
     width: 100%;
     background: #fff;
-    padding: 10px;
     overflow: auto;
-    margin-bottom: 10px;
+    margin: 10px 0 20px;
 }
 
 #transferMenu select,
@@ -11,7 +10,6 @@
     float: left;
     border: 0;
     font-size: 12px;
-    margin-left: 10px;
 }
 
 #transferMenu .label {
@@ -22,6 +20,8 @@
 #transferMenu select {
     background: #34495e;
     color: white;
+    margin-left: 10px;
+    outline: none;
 }
 
 #tooltip {
