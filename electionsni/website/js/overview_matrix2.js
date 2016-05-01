@@ -162,6 +162,9 @@ $.each(constituencies, function (i, constituency) {
     party.Num_Elected = party.Num_Elected || 0;
     return party 
   });
+
+  partyArray = partyArray.sort(compareElected);
+  
   // position each party according to num_elected
   $.each(partyArray, function(i, party){
     $("#"+party.Party_Abbreviation).css("top",i*20+0);
