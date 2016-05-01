@@ -31,6 +31,28 @@
   margin-bottom: 40px;
 }
 
+#overview_matrix:before {
+    content: "Results by Constituency";
+    margin-bottom: 10px;
+    text-align: center;
+    display: block;
+    width: 100%;
+    font-size: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+#party_matrix:before {
+    content: "Results by Party";
+    margin-bottom: 10px;
+    text-align: center;
+    display: block;
+    width: 100%;
+    font-size: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
 #tooltip {
   display: none;
   position: absolute;
@@ -82,4 +104,13 @@
   float: left;
   margin-right: 2px;
   margin-top: 4px;
+}
+
+#thirtySeats {
+    height: 310px;
+    border-left: 1px dashed black;
+    display: block;
+    position: absolute;
+    left: 616px;
+    top: 48px;
 }

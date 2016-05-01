@@ -167,7 +167,7 @@ $.each(constituencies, function (i, constituency) {
   
   // position each party according to num_elected
   $.each(partyArray, function(i, party){
-    $("#"+party.Party_Abbreviation).css("top",i*20+0);
+    $("#"+party.Party_Abbreviation).css("top",i*20+44);
   })
 
 
