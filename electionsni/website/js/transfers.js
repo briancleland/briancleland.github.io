@@ -211,7 +211,7 @@ $.getJSON("2011/NI/party-transfers.json", function (json) {
                         el: "#transfers"
                     })
                     .on("mouseover", function (event, item) {
-                        if (item && item.datum) {
+                        if (item && item.datum.amount) {
                             console.log(item);
                             $('#tooltip').show();
                             $('#tooltip').html(
