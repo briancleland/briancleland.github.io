@@ -37,8 +37,9 @@
           shape: {value: "circle"},
           size: {scale: "size", field: "amount"},
           fill: {field: "color"},
-          stroke: {value: "#888"},
-          strokeWidth: {value: 1}
+          stroke: {value: "#000"},
+          strokeWidth: {value: 1},
+          strokeOpacity: {value: 0.5}
         },
         update: {
           x: {scale: "x2", field: "recipient"},

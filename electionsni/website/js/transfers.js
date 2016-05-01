@@ -88,6 +88,11 @@ var parties = {
     "Party_Id": 994,
     "Party_Abbreviation": "PUP",
     "Hex_Col": "#1e0082"
+  },
+  "not_transferred": {
+    "Party_Id": 0,
+    "Party_Abbreviation": "N/T",
+    "Hex_Col": "#fff"
   }
 }
 
@@ -103,21 +108,23 @@ $.getJSON("2011/NI/party-transfers.json", function (json) {
         var con = constituency.Constituency_Name;
         transfers[con] = {};
         $.each(constituency.Counts, function (j, count) { // loop thru each count
-            for (var party in count.From) break; // get the name of the donor party
+            for (var donor in count.From) break; // get the name of the donor party
             // create party if does not exist
-            if (!transfers[con][party]) {
-                transfers[con][party] = {total: count.From[party]}    
+            if (!transfers[con][donor]) {
+                transfers[con][donor] = {total: count.From[donor]}; //initialise and add total  
             } else {
-//                console.log("party Exists: " + party + " " + count.From[party]);
-//                console.log("Current total: " + transfers[con][party].total)
-                transfers[con][party].total += count.From[party]
-//                console.log("New total: " + transfers[con][party].total)
+                transfers[con][donor].total += count.From[donor]; // add to existing total
             }
-            $.each(count.To, function (recipient, amount) {
-                if (!transfers[con][party][recipient]) { // if recipient does not exist
-                    transfers[con][party][recipient] = amount; // set recipient value = amount
+            if (!transfers[con][donor]["Not Transferred"]) {
+                transfers[con][donor].not_transferred = count.Not_transferred; // create not_transferred value
+            } else {
+                transfers[con][donor].not_transferred += count.Not_transferred; // add to exisiting n_t value
+            }
+            $.each(count.To, function (recipient, amount) { // loop thru each recipient
+                if (!transfers[con][donor][recipient]) { // if recipient does not exist
+                    transfers[con][donor][recipient] = amount; // set recipient value = amount
                 } else {
-                    transfers[con][party][recipient] += amount // add to existing recipient amount 
+                    transfers[con][donor][recipient] += amount // add to existing recipient amount 
                 };
             });
         });
@@ -125,11 +132,11 @@ $.getJSON("2011/NI/party-transfers.json", function (json) {
     console.log("transfers", transfers);
     // convert constituency objects to arrays of individual transfers
     $.each(transfers, function (cname, constituency) { // loop thru constituencies
-        console.log("--- " + cname + " ---");
+//        console.log("--- " + cname + " ---");
         var data = [];
         $.each(constituency, function (donor, transfers) { // loop thru donor parties
             var totalTransfers = -transfers.total || 0;
-            console.log(donor, totalTransfers);
+//            console.log(donor, totalTransfers);
             $.each(transfers, function (recipient, amount) { // loop thru recipient parties
 //                console.log(transfers);
                 if (recipient != "total") {
@@ -175,7 +182,7 @@ $.getJSON("2011/NI/party-transfers.json", function (json) {
                     },                    {
                         type: "formula", 
                         field: "height",
-                        expr: "datum.rank*40"
+                        expr: "datum.rank*30"
                     }
                   ]
                 },
@@ -194,7 +201,7 @@ $.getJSON("2011/NI/party-transfers.json", function (json) {
                     },                    {
                         type: "formula", 
                         field: "width",
-                        expr: "datum.rank*40"
+                        expr: "datum.rank*35"
                     }
                   ]
                 }
